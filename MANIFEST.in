@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ricemill *.css
+recursive-include ricemill *.csv
+recursive-include ricemill *.html
+recursive-include ricemill *.ico
+recursive-include ricemill *.js
+recursive-include ricemill *.json
+recursive-include ricemill *.md
+recursive-include ricemill *.png
+recursive-include ricemill *.py
+recursive-include ricemill *.svg
+recursive-include ricemill *.txt
+recursive-exclude ricemill *.pyc
