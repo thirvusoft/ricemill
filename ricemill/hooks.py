@@ -107,12 +107,12 @@ after_install = "ricemill.custom.custom_fields_item.customize"
 # ---------------
 
 scheduler_events = {
-	"all": [
+	# "all": [
+	# 	"ricemill.custom.note.remainder_note"
+	# ],
+	"daily": [
 		"ricemill.custom.note.remainder_note"
 	],
-	# "daily": [
-	# 	"ricemill.tasks.daily"
-	# ],
 	# "hourly": [
 	# 	"ricemill.custom.note.remainder_note"
 	# ],
