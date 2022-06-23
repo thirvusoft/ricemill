@@ -12,7 +12,7 @@ def remainder_note():
             territory[i['parent']]= [i['territory']]
     parent=[i["parent"] for i in item]
     item_name = frappe.get_all("Item",filters={'name':['in',parent]},fields=['item_name','name'])
-    content = "It's a Time for Buying an Item"
+    content = "<p><b>It's a Time to Purchase an Item </b> </p>"
     for i  in item_name:
         content+=f"<p>{i['item_name']} Available in {(', ').join(territory[i['name']])}</p>"
         
