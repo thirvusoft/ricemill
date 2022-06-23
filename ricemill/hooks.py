@@ -57,7 +57,7 @@ app_license = "MIT"
 # ------------
 
 # before_install = "ricemill.install.before_install"
-# after_install = "ricemill.install.after_install"
+after_install = "ricemill.custom.custom_fields_item.customize"
 
 # Uninstallation
 # ------------
@@ -106,23 +106,23 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"ricemill.tasks.all"
-# 	],
-# 	"daily": [
-# 		"ricemill.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"ricemill.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"ricemill.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"ricemill.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+	"all": [
+		"ricemill.custom.note.remainder_note"
+	],
+	# "daily": [
+	# 	"ricemill.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"ricemill.custom.note.remainder_note"
+	# ],
+	# "weekly": [
+	# 	"ricemill.tasks.weekly"
+	# ]
+	# "monthly": [
+	# 	"ricemill.tasks.monthly"
+	# ]
+}
 
 # Testing
 # -------
