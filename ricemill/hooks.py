@@ -57,7 +57,8 @@ app_license = "MIT"
 # ------------
 
 # before_install = "ricemill.install.before_install"
-after_install = "ricemill.custom.custom_fields_item.customize"
+after_install = ["ricemill.ricemill.custom.js.python.customfield.customize_field",
+"ricemill.custom.custom_fields_item.customize"]
 
 # Uninstallation
 # ------------
@@ -95,13 +96,13 @@ after_install = "ricemill.custom.custom_fields_item.customize"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
+doc_events = {
+	"Sales Invoice": {
+		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+		# "on_trash": "method"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
