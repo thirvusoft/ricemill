@@ -1,0 +1,39 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-06-24 12:51:38.867309",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ts_labour",
+  "ts_expense_acc"
+ ],
+ "fields": [
+  {
+   "fieldname": "ts_labour",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Labour",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "ts_expense_acc",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Expense Account",
+   "options": "Account"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2022-06-24 15:51:45.357240",
+ "modified_by": "Administrator",
+ "module": "Ricemill",
+ "name": "TS Workstation Labour",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
