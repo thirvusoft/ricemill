@@ -57,11 +57,8 @@ app_license = "MIT"
 # ------------
 
 # before_install = "ricemill.install.before_install"
-after_install = ["ricemill.ricemill.custom.js.python.customfield.customize_field",
-"ricemill.custom.custom_fields_item.customize"]
-
+after_install = "ricemill.utils.after_install.after_install"
 # Uninstallation
-# ------------
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
 # after_uninstall = "ricemill.uninstall.after_uninstall"
