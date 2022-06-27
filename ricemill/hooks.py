@@ -60,9 +60,7 @@ doctype_js = {
 
 # before_install = "ricemill.install.before_install"
 after_install = "ricemill.utils.after_install.after_install"
-
 # Uninstallation
-# ------------
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
 # after_uninstall = "ricemill.uninstall.after_uninstall"
@@ -98,8 +96,13 @@ after_install = "ricemill.utils.after_install.after_install"
 # Hook on document methods and events
 
 doc_events = {
+	"Sales Invoice": {
+		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+		# "on_trash": "method"
+	},
 	"Work Order": {
-		"before_submit":"ricemill.ricemill.custom.py.work_order.check_quality_inspection"
+	"before_submit":"ricemill.ricemill.custom.py.work_order.check_quality_inspection"
 	}
 }
 
