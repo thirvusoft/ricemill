@@ -21,7 +21,7 @@ def operation_customize_field():
             dict(fieldname="capacity_exceeds",
             label="When Capacity exceeds",
             fieldtype="Select",
-            options="\n Allow \n Block",
+            options="\nAllow\nBlock",
             insert_after="capacity_operation",
             depends_on="eval:doc.grading_operation==1",
             mandatory_depends_on="eval:doc.grading_operation==1"
