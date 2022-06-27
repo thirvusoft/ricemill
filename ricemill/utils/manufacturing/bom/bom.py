@@ -28,7 +28,6 @@ def bom_customize_field():
                 insert_after="target_warehouse",
                 reqd=1
                 ),
-            
             ],
         "BOM":[
             dict(fieldname='section_break_bom',
@@ -41,7 +40,6 @@ def bom_customize_field():
                 fieldtype="Table",
                 options="TS Work Order Status",
                 insert_after="section_break_bom",
-                reqd=1
                 ),
         ]
             }
