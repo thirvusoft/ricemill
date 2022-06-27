@@ -31,7 +31,9 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+	"Work Order" : "ricemill/custom/js/work_order.js"
+	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -98,6 +100,9 @@ doc_events = {
 		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
 		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
 		# "on_trash": "method"
+	},
+	"Work Order": {
+	"before_submit":"ricemill.ricemill.custom.py.work_order.check_quality_inspection"
 	}
 }
 
@@ -109,7 +114,7 @@ scheduler_events = {
 	# 	"ricemill.custom.note.remainder_note"
 	# ],
 	"daily": [
-		"ricemill.custom.note.remainder_note"
+		"ricemill.utils.desk.note.note.remainder_note"
 	],
 	# "hourly": [
 	# 	"ricemill.custom.note.remainder_note"
