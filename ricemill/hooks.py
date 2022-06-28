@@ -32,6 +32,7 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
+	"Work Order" : "ricemill/custom/js/workorder.js",
 	"Job Card" : "ricemill/custom/js/job_card.js",
 	"Operation": "ricemill/custom/js/operation.js"
 	}
@@ -102,6 +103,10 @@ doc_events = {
 		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
 		# "on_trash": "method"
 	},
+
+	"Work Order": {
+	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	}
 }
 
 # Scheduled Tasks
