@@ -7,7 +7,8 @@ def work_order_customize_field():
                 fieldtype='Table',
                 options='TS Work Order Status',
                 insert_after='company',
-                read_only=1
+                read_only=1,
+                allow_on_submit=1
                 ),
                 dict(fieldname='ts_parent_work_order',
                     label='Parent WorkOrder',

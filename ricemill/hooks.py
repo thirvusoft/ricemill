@@ -101,11 +101,12 @@ doc_events = {
 	"Sales Invoice": {
 		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
 		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
-		# "on_trash": "method"
-	},
-
+		},
 	"Work Order": {
-	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+		"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	},
+	"BOM": {
+		'validate': "ricemill.ricemill.custom.py.bom.validate"
 	}
 }
 
