@@ -20,7 +20,7 @@ def job_card_time_log_customize_field():
             dict(fieldname="machine_state",
               label='Machine state',
               fieldtype='Select',
-              options='heat\ncool\noff',
+              options='\nheat\ncool\noff',
               insert_after='temperature'
               ),
         ]
