@@ -102,6 +102,9 @@ doc_events = {
 		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
 		# "on_trash": "method"
 	},
+	"Job Card":{
+		"before_submit":"ricemill.ricemill.custom.py.job_card.before_submit"
+	}
 }
 
 # Scheduled Tasks

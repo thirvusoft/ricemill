@@ -80,6 +80,7 @@ frappe.ui.form.on("Job Card",{
                             doctype: frm.doc.doctype,
                             docname: frm.doc.name,
                             items: data.items
+
                         },
                         freeze: true,
                         callback: function (r) {
@@ -111,7 +112,7 @@ frappe.ui.form.on("Job Card",{
                         // "qty": frm.doc.production_itemqty,
                         // "description": frm.doc.production_itemdescription,
                         // "serial_no": frm.doc.production_itemserial_no,
-                        // "batch_no": frm.doc.production_itembatch_no
+                        //"batch_no": frm.doc.production_itembatch_no
                     });
                     dialog_items.grid.refresh();
                 // }

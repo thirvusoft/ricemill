@@ -10,7 +10,6 @@ def operation_customize_field():
             fieldtype="Check",
             insert_after="section_break_opration",
             ),
-
             dict(fieldname="capacity_operation",
             label="Max Capacity",
             fieldtype="Data",
@@ -23,8 +22,8 @@ def operation_customize_field():
             fieldtype="Select",
             options="\nAllow\nBlock",
             insert_after="capacity_operation",
-            depends_on="eval:doc.grading_operation==1",
-            mandatory_depends_on="eval:doc.grading_operation==1"
+            depends_on="eval:doc.grading==1",
+            mandatory_depends_on="eval:doc.grading==1"
             ),
             dict(fieldname="soaking",
             label="Soaking",
