@@ -52,3 +52,8 @@ def job_card_customize_field():
 def job_card_property_setter():                
     make_property_setter("Job Card", "more_information", "hidden", 1, "Check")
     make_property_setter("Job Card", "wip_warehouse", "reqd", 0, "Check")
+    make_property_setter("Job Card", "more_information", "hidden", 1, "Check")
+    make_property_setter("Job Card", "wip_warehouse", "reqd", 0, "Check")
+    make_property_setter("Job Card", "quality_inspection_template", "hidden", 1, "Check")
+    make_property_setter("Job Card", "quality_inspection", "hidden", 1, "Check")
+    make_property_setter("Job Card", "project", "hidden", 1, "Check")
