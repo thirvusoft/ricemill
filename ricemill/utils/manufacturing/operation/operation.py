@@ -3,8 +3,11 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def operation_customize_field():
     custom_fields = {
         "Operation": [
-            dict(fieldname='section_break_opration', label='Operation',
-                fieldtype='Section Break',insert_after='quality_inspection_template',collapsible=1),
+            dict(fieldname='section_break_opration',
+            label='Operation',
+            fieldtype='Section Break',
+            insert_after='quality_inspection_template',
+            collapsible=1),
             dict(fieldname="grading_operation",
             label="Grading",
             fieldtype="Check",

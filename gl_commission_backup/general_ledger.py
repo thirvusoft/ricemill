@@ -284,10 +284,11 @@ def round_off_debit_credit(gl_map):
 	if abs(debit_credit_diff) > allowance:
 		#Customised by Thirvusoft
 		#Start
-		if(gl_map[0].voucher_type=='Sales Invoice'):
-			pass
+
+		if(gl_map[0].voucher_type=='Sales Invoice' or gl_map[0].voucher_type=='Purchase Invoice'):
 		else:
 			frappe.throw(
+				
 				_("Debit and Credit not equal for {0} #{1}. Difference is {2}.").format(
 					gl_map[0].voucher_type, gl_map[0].voucher_no, debit_credit_diff
 				)

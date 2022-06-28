@@ -1,8 +1,12 @@
 import frappe
 def  calc_commission(doc,event):
     if doc.ts_account:
-        if not doc.sales_partner:
-            frappe.throw('Enter Sales Person for commission')
+        if doc=='Sales Invoice':
+            if not doc.sales_partner:
+                frappe.throw('Enter Sales Person for commission')
+        elif doc =='Purchase Invoice':
+            if not doc.ts_purchase_partner:
+                frappe.throw('Enter Purchase Person for commission')
         if  not doc.cost_center:
             frappe.throw("Please select Cost Center")
         else:

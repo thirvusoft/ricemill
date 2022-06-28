@@ -1,6 +1,6 @@
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def bom_customize_field():
-    bom_custom_fields = {
+    bom_custom_fields = {   
         "BOM Operation": [
             dict(fieldname='section_break_warehouse',
                 label='Warehouse',
