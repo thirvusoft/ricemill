@@ -65,8 +65,8 @@ doctype_js = {
 
 # before_install = "ricemill.install.before_install"
 
-after_install ={ "ricemill.utils.after_install.after_install",
-  "ricemill.custom.warehouse.create_fields"}
+after_install =["ricemill.utils.after_install.after_install",
+  "ricemill.custom.warehouse.create_fields"]
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"

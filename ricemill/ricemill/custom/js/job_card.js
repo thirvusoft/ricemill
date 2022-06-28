@@ -104,26 +104,40 @@ frappe.ui.form.on("Job Card",{
         
             // frm.doc.items.forEach(item => {
                 // if (!frm.doc.production_itemquality_inspection) {
+                    var bomitem=[]
                     let dialog_items = dialog.fields_dict.items;
-                    dialog_items.df.data.push({
-                        "docname": frm.doc.production_item,
-                        "item_code": frm.doc.production_item,
-                        "item_name": frm.doc.item_name,
-                        // "qty": frm.doc.production_itemqty,
-                        // "description": frm.doc.production_itemdescription,
-                        // "serial_no": frm.doc.production_itemserial_no,
-                        //"batch_no": frm.doc.production_itembatch_no
-                    });
-                    dialog_items.grid.refresh();
+                    frappe.db.get_list("BOM Item",{filters:{'parent':frm.doc.bom_no},fields:["item_code","item_name"]}).then((bom_item)=>{
+                        bom_item.forEach((item)=>{
+                            console.log(item)
+                            // bomitem.push(item.item_code)
+                            dialog_items.df.data.push({
+                                "docname": frm.doc.name,
+                                "item_code": item.item_code,
+                                "item_name": item.item_name,
+                            });
+                            console.log( dialog_items.df.data)
+                            dialog_items.grid.refresh();
+                            data = dialog.fields_dict.items.df.data;
+                                if (!data.length) {
+                                    frappe.msgprint(__("All items in this document already have a linked Quality Inspection."));
+                                } else {
+                                    dialog.show();
+                                }
+                        })
+                    })
+                    // console.log(bomitem)
+                    
+                    // bomitem.forEach((item)=>{
+                        
+
+                        
+                    // })
+                  
+                    
                 // }
             // });
         
-            data = dialog.fields_dict.items.df.data;
-            if (!data.length) {
-                frappe.msgprint(__("All items in this document already have a linked Quality Inspection."));
-            } else {
-                dialog.show();
-            }
+            
         }, __("Create"));
     
 }

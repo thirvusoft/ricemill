@@ -19,7 +19,7 @@ def check_quality_inspection(doc):
             frappe.throw ("Quality Inspection is Missing")
 def before_submit(doc,action):
     jc_rej=sum([flt(i) for i in frappe.get_all("Quality Inspection",{'reference_name':doc.name,'status':'Rejected'},pluck='accepted_rejected_qty')])
-    frappe.msgprint(f'The Rejected item Quantity {jc_rej}')
+    if jc_rej:
+        frappe.msgprint(f'The Rejected item Quantity {jc_rej}')
 
-    
 
