@@ -32,7 +32,7 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
-	"Work Order" : "ricemill/custom/js/work_order.js"
+	"Work Order" : "ricemill/custom/js/workorder.js"
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -102,7 +102,7 @@ doc_events = {
 		# "on_trash": "method"
 	},
 	"Work Order": {
-	"before_submit":"ricemill.ricemill.custom.py.work_order.check_quality_inspection"
+	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
 	}
 }
 
