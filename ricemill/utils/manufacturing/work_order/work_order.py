@@ -7,11 +7,13 @@ def work_order_customize_field():
                 fieldtype='Table',
                 options='TS Work Order Status',
                 insert_after='company',
-                reqd=1),
+                read_only=1
+                ),
                 dict(fieldname='ts_parent_work_order',
                     label='Parent WorkOrder',
                     fieldtype='Data',
-                    insert_after='ts_work_order_status')
+                    insert_after='ts_work_order_status',
+                    read_only=1)
             ],
             "Work Order Operation":[
               dict(fieldname="ts_source_warehouse",

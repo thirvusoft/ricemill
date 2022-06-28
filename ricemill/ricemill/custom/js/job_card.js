@@ -1,7 +1,8 @@
-frappe.ui.form.on("Work Order",{
+frappe.ui.form.on("Job Card",{
    "refresh":function(frm){
     frm.add_custom_button(__("Quality Inspection(s)"), () => {
             let data = [];
+            var item =cur_frm.doc.production_item
             const fields = [
                 {
                     label: "Items",
@@ -23,7 +24,8 @@ frappe.ui.form.on("Work Order",{
                             fieldtype: "Read Only",
                             fieldname: "item_code",
                             label: __("Item Code"),
-                            in_list_view: true
+                            in_list_view: true,
+                            options: "Item",
                         },
                         {
                             fieldtype: "Read Only",
@@ -103,13 +105,13 @@ frappe.ui.form.on("Work Order",{
                 // if (!frm.doc.production_itemquality_inspection) {
                     let dialog_items = dialog.fields_dict.items;
                     dialog_items.df.data.push({
-                        "docname": frm.doc.production_itemname,
-                        "item_code": frm.doc.production_itemitem_code,
-                        "item_name": frm.doc.production_itemitem_name,
-                        "qty": frm.doc.production_itemqty,
-                        "description": frm.doc.production_itemdescription,
-                        "serial_no": frm.doc.production_itemserial_no,
-                        "batch_no": frm.doc.production_itembatch_no
+                        "docname": frm.doc.production_item,
+                        "item_code": frm.doc.production_item,
+                        "item_name": frm.doc.item_name,
+                        // "qty": frm.doc.production_itemqty,
+                        // "description": frm.doc.production_itemdescription,
+                        // "serial_no": frm.doc.production_itemserial_no,
+                        // "batch_no": frm.doc.production_itembatch_no
                     });
                     dialog_items.grid.refresh();
                 // }
