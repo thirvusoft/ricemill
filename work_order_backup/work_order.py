@@ -84,7 +84,7 @@ class WorkOrder(Document):
 		self.calculate_operating_cost()
 		self.validate_qty()
 		self.validate_transfer_against()
-		self.validate_operation_time()
+		# self.validate_operation_time()
 		self.status = self.get_status()
 
 		validate_uom_is_integer(self, "stock_uom", ["qty", "produced_qty"])
@@ -657,8 +657,8 @@ class WorkOrder(Document):
 					f"""select
 						operation, description, workstation, 
 						base_hour_rate as hour_rate, time_in_mins * {qty} as time_in_mins,
-						"Pending" as status, parent as bom, batch_size, sequence_id, source_warehouse, 
-						target_warehouse, stock_entry_type
+						"Pending" as status, parent as bom, batch_size, sequence_id, source_warehouse as ts_source_warehouse, 
+						target_warehouse as ts_target_warehouse, stock_entry_type as ts_stock_entry_type
 					from
 						`tabBOM Operation`
 					where
@@ -676,16 +676,18 @@ class WorkOrder(Document):
 			bom_tree = frappe.get_doc("BOM", self.bom_no).get_tree_representation()
 			bom_traversal = reversed(bom_tree.level_order_traversal())
 
-			for node in bom_traversal:
-				if node.is_bom:
-					operations.extend(_get_operations(node.name, operation_name, qty=node.exploded_qty))
+			# for node in bom_traversal:
+			# 	if node.is_bom:
+			# 		print(operation_name,"::::::::::::::::", node.name)
+			# 		operations.extend(_get_operations(node.name, operation_name, qty=node.exploded_qty))
 
 		bom_qty = frappe.db.get_value("BOM", self.bom_no, "quantity")
 		operations.extend(_get_operations(self.bom_no, operation_name, qty=1.0/bom_qty))
-
+		print(operations)
 		for correct_index, operation in enumerate(operations, start=1):
 			operation.idx = correct_index
 		operations = [i for i in operations if(i['operation'] == operation_name)]
+		
 		self.set('operations', operations)
 		self.calculate_time()
 
