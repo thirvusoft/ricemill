@@ -65,6 +65,7 @@ doctype_js = {
 
 # before_install = "ricemill.install.before_install"
 
+
 after_install ="ricemill.utils.after_install.after_install"
 # Uninstallation
 
@@ -108,7 +109,9 @@ doc_events = {
 		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
 		# "on_trash": "method"
 	},
-
+	"Job Card":{
+		"before_submit":"ricemill.ricemill.custom.py.job_card.before_submit"
+	},
 	"Work Order": {
 	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
 	}
