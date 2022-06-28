@@ -5,7 +5,7 @@ def operation_customize_field():
         "Operation": [
             dict(fieldname='section_break_opration', label='Operation',
                 fieldtype='Section Break',insert_after='quality_inspection_template',collapsible=1),
-            dict(fieldname="grading_operation",
+            dict(fieldname="grading",
             label="Grading",
             fieldtype="Check",
             insert_after="section_break_opration",
@@ -14,9 +14,9 @@ def operation_customize_field():
             dict(fieldname="capacity_operation",
             label="Max Capacity",
             fieldtype="Data",
-            insert_after="grading_operation",
-            depends_on="eval:doc.grading_operation==1",
-            mandatory_depends_on="eval:doc.grading_operation==1"
+            insert_after="grading",
+            depends_on="eval:doc.grading==1",
+            mandatory_depends_on="eval:doc.grading==1"
             ),
             dict(fieldname="capacity_exceeds",
             label="When Capacity exceeds",
@@ -26,29 +26,28 @@ def operation_customize_field():
             depends_on="eval:doc.grading_operation==1",
             mandatory_depends_on="eval:doc.grading_operation==1"
             ),
-            dict(fieldname="shoking_operation",
-            label="Shoking",
+            dict(fieldname="soaking",
+            label="Soaking",
             fieldtype="Check",
             insert_after="capacity_exceeds",
             ),
-            dict(fieldname="boiling_operation",
+            dict(fieldname="boiling",
             label="Boiling",
             fieldtype="Check",
-            insert_after="shoking_operation",
+            insert_after="soaking",
             ),
-            dict(fieldname="dryer_operation",
+            dict(fieldname="dryer",
             label="Dryer",
             fieldtype="Check",
-            insert_after="boiling_operation",
+            insert_after="boiling",
             ),
-            dict(fieldname="hulling_operation",
+            dict(fieldname="hulling",
             label="Hulling",
             fieldtype="Check",
-            insert_after="dryer_operation",
+            insert_after="dryer",
             )
             
             ]
             }
-
     create_custom_fields(custom_fields)
 
