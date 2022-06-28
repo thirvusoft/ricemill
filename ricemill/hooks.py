@@ -31,7 +31,7 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Warehouse":"custom/warehouse.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -57,7 +57,7 @@ app_license = "MIT"
 # ------------
 
 # before_install = "ricemill.install.before_install"
-# after_install = "ricemill.install.after_install"
+after_install = "ricemill.custom.warehouse.create_fields"
 
 # Uninstallation
 # ------------
@@ -94,14 +94,10 @@ app_license = "MIT"
 # Document Events
 # ---------------
 # Hook on document methods and events
-
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
+doc_events = {
+	
+	"Stock Ledger Entry":{"on_submit":"ricemill.custom.stock_ledger_entry.validate_warehouse"},
+}
 
 # Scheduled Tasks
 # ---------------
