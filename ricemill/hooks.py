@@ -31,10 +31,13 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
+
+
 doctype_js = {
 	"Work Order" : "ricemill/custom/js/workorder.js",
 	"Job Card" : "ricemill/custom/js/job_card.js",
-	"Operation": "ricemill/custom/js/operation.js"
+	"Operation": "ricemill/custom/js/operation.js",
+  "Warehouse":"custom/warehouse.js"
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -61,7 +64,9 @@ doctype_js = {
 # ------------
 
 # before_install = "ricemill.install.before_install"
-after_install = "ricemill.utils.after_install.after_install"
+
+after_install ={ "ricemill.utils.after_install.after_install",
+  "ricemill.custom.warehouse.create_fields"}
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
@@ -96,6 +101,7 @@ after_install = "ricemill.utils.after_install.after_install"
 # Document Events
 # ---------------
 # Hook on document methods and events
+
 
 doc_events = {
 	"Sales Invoice": {
