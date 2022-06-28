@@ -31,7 +31,14 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Warehouse":"custom/warehouse.js"}
+
+
+doctype_js = {
+	"Work Order" : "ricemill/custom/js/workorder.js",
+	"Job Card" : "ricemill/custom/js/job_card.js",
+	"Operation": "ricemill/custom/js/operation.js",
+  "Warehouse":"custom/warehouse.js"
+	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -57,10 +64,10 @@ doctype_js = {"Warehouse":"custom/warehouse.js"}
 # ------------
 
 # before_install = "ricemill.install.before_install"
-after_install = "ricemill.custom.warehouse.create_fields"
 
+after_install ={ "ricemill.utils.after_install.after_install",
+  "ricemill.custom.warehouse.create_fields"}
 # Uninstallation
-# ------------
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
 # after_uninstall = "ricemill.uninstall.after_uninstall"
@@ -94,31 +101,40 @@ after_install = "ricemill.custom.warehouse.create_fields"
 # Document Events
 # ---------------
 # Hook on document methods and events
+
+
 doc_events = {
-	
-	"Stock Ledger Entry":{"on_submit":"ricemill.custom.stock_ledger_entry.validate_warehouse"},
+	"Sales Invoice": {
+		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+		# "on_trash": "method"
+	},
+
+	"Work Order": {
+	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	}
 }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"ricemill.tasks.all"
-# 	],
-# 	"daily": [
-# 		"ricemill.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"ricemill.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"ricemill.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"ricemill.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+	# "all": [
+	# 	"ricemill.custom.note.remainder_note"
+	# ],
+	"daily": [
+		"ricemill.utils.desk.note.note.remainder_note"
+	],
+	# "hourly": [
+	# 	"ricemill.custom.note.remainder_note"
+	# ],
+	# "weekly": [
+	# 	"ricemill.tasks.weekly"
+	# ]
+	# "monthly": [
+	# 	"ricemill.tasks.monthly"
+	# ]
+}
 
 # Testing
 # -------
