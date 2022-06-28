@@ -1,6 +1,6 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-def create_fields():
+def create_warehouse_fields():
     custom_fields={
         "Warehouse":[
             dict(fieldname="section_break_228", fieldtype="Section Break", insert_after="disabled"),

@@ -37,7 +37,7 @@ doctype_js = {
 	"Work Order" : "ricemill/custom/js/workorder.js",
 	"Job Card" : "ricemill/custom/js/job_card.js",
 	"Operation": "ricemill/custom/js/operation.js",
-  "Warehouse":"custom/warehouse.js"
+  	"Warehouse":"ricemill/custom/js/warehouse.js"
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -65,8 +65,8 @@ doctype_js = {
 
 # before_install = "ricemill.install.before_install"
 
-after_install ={ "ricemill.utils.after_install.after_install",
-  "ricemill.custom.warehouse.create_fields"}
+after_install ="ricemill.utils.after_install.after_install"
+ 
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
@@ -112,6 +112,10 @@ doc_events = {
 
 	"Work Order": {
 	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	},
+
+	"Stock Ledger Entry":{
+		"before_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
 	}
 }
 

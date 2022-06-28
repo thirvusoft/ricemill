@@ -11,6 +11,7 @@ from ricemill.utils.manufacturing.workstation.workstation_working_hour import wo
 from ricemill.utils.manufacturing.operation.operation import operation_customize_field
 from ricemill.utils.manufacturing.work_order.work_order import work_order_customize_field
 from ricemill.utils.manufacturing.job_card.jobcard import job_card_customize_field
+from ricemill.utils.stock.warehouse.warehouse import create_warehouse_fields
 def after_install():
     customize_field()
     workstation_customize_field()
@@ -22,4 +23,5 @@ def after_install():
     quality_inspection_customize_field()
     work_order_customize_field()
     job_card_customize_field()
+    create_warehouse_fields()
 
