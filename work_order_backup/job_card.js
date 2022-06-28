@@ -97,6 +97,13 @@ frappe.ui.form.on('Job Card', {
 			});
 		}
 	},
+	onload: function(frm){
+		if(frm.is_new()){
+			frm.set_value('time_logs',[])
+			frm.refresh()
+			console.log("Reached")
+		}
+	},
 
 	setup_quality_inspection: function(frm) {
 		let quality_inspection_field = frm.get_docfield("quality_inspection");
