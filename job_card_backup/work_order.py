@@ -732,8 +732,8 @@ class WorkOrder(Document):
 				d.status = "Completed"
 			elif flt(d.completed_qty) <= max_allowed_qty_for_wo:
 				d.status = "Completed"
-			else:
-				frappe.throw(_("Completed Qty cannot be greater than 'Qty to Manufacture'"))
+			# else:
+			# 	frappe.throw(_("Completed Qty cannot be greater than 'Qty to Manufacture'"))
 
 	def set_actual_dates(self):
 		if self.get("operations"):
