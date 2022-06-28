@@ -17,7 +17,8 @@ def remainder_note():
         content+=f"<p>{i['item_name']} Available in {(', ').join(territory[i['name']])}</p>"
         
     doc = frappe.get_value("Note",{"expire_notification_on":date},"name")
-    if doc:
+    if(frappe.db.exists("Note", "Remainder")):note=frappe.get_doc("Note","Remainder")
+    elif doc:
         note=frappe.get_doc("Note",doc)
     else :
         note = frappe.new_doc("Note")
