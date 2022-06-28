@@ -107,15 +107,12 @@ frappe.ui.form.on("Job Card",{
                     var bomitem=[]
                     let dialog_items = dialog.fields_dict.items;
                     frappe.db.get_list("BOM Item",{filters:{'parent':frm.doc.bom_no},fields:["item_code","item_name"]}).then((bom_item)=>{
-                        bom_item.forEach((item)=>{
-                            console.log(item)
-                            // bomitem.push(item.item_code)
+                        bom_item.forEach((item)=>{ 
                             dialog_items.df.data.push({
                                 "docname": frm.doc.name,
                                 "item_code": item.item_code,
                                 "item_name": item.item_name,
                             });
-                            console.log( dialog_items.df.data)
                             dialog_items.grid.refresh();
                             data = dialog.fields_dict.items.df.data;
                                 if (!data.length) {
@@ -125,18 +122,6 @@ frappe.ui.form.on("Job Card",{
                                 }
                         })
                     })
-                    // console.log(bomitem)
-                    
-                    // bomitem.forEach((item)=>{
-                        
-
-                        
-                    // })
-                  
-                    
-                // }
-            // });
-        
             
         }, __("Create"));
     
