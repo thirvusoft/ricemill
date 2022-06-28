@@ -17,6 +17,5 @@ def check_quality_inspection(doc):
 
     if inspection_req:
         quality_inspection=frappe.get_value("Quality Inspection",{'reference_name':doc['name']},"name")
-        print(quality_inspection)
         if not quality_inspection:
             frappe.throw ("Quality Inspection is Missing")
