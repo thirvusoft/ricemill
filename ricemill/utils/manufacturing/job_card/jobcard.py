@@ -51,3 +51,4 @@ def job_card_customize_field():
     create_custom_fields(job_card_customize_field)
 def job_card_property_setter():                
     make_property_setter("Job Card", "more_information", "hidden", 1, "Check")
+    make_property_setter("Job Card", "wip_warehouse", "reqd", 0, "Check")
