@@ -10,6 +10,7 @@ from ricemill.utils.accounts.sales_invoice import customize_field
 from ricemill.utils.manufacturing.workstation.workstation_working_hour import workstation_customize_field
 from ricemill.utils.manufacturing.operation.operation import operation_customize_field
 from ricemill.utils.stock.item.quality_inspection import quality_inspection_fields
+from ricemill.utils.manufacturing.work_order.work_order import work_order_customize_field
 
 def after_install():
     customize_field()
@@ -21,3 +22,4 @@ def after_install():
     bom_customize_field()
     quality_inspection_customize_field()
     quality_inspection_fields()
+    work_order_customize_field()

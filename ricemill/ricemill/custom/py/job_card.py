@@ -15,7 +15,6 @@ def check_quality_inspection(doc):
     inspection_req=frappe.get_value("Item",doc['production_item'],opr)
     if inspection_req:
         quality_inspection=frappe.get_value("Quality Inspection",{'reference_name':doc['name']},"name")
-        print(quality_inspection)
         if not quality_inspection:
             frappe.throw ("Quality Inspection is Missing")
 def before_submit(doc,action):
