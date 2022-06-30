@@ -1,5 +1,10 @@
 frappe.ui.form.on("Job Card",{
    "refresh":function(frm){
+    if(!frm.doc.employee.length){
+        frm.set_value('time_logs',[])
+        // frm.refresh()
+        console.log("Reached")
+    }
     frm.add_custom_button(__("Quality Inspection(s)"), () => {
             let data = [];
             var item =cur_frm.doc.production_item
@@ -80,7 +85,6 @@ frappe.ui.form.on("Job Card",{
                             doctype: frm.doc.doctype,
                             docname: frm.doc.name,
                             items: data.items
-
                         },
                         freeze: true,
                         callback: function (r) {

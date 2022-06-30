@@ -31,13 +31,10 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-
-
 doctype_js = {
 	"Work Order" : "ricemill/custom/js/workorder.js",
 	"Job Card" : "ricemill/custom/js/job_card.js",
-	"Operation": "ricemill/custom/js/operation.js",
-  "Warehouse":"custom/warehouse.js"
+	"Operation": "ricemill/custom/js/operation.js"
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -64,9 +61,7 @@ doctype_js = {
 # ------------
 
 # before_install = "ricemill.install.before_install"
-
-
-after_install ="ricemill.utils.after_install.after_install"
+after_install = "ricemill.utils.after_install.after_install"
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
@@ -102,7 +97,6 @@ after_install ="ricemill.utils.after_install.after_install"
 # ---------------
 # Hook on document methods and events
 
-
 doc_events = {
 	"Sales Invoice": {
 		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
@@ -114,6 +108,9 @@ doc_events = {
 	},
 	"Work Order": {
 	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	},
+	"BOM": {
+		'validate': "ricemill.ricemill.custom.py.bom.validate"
 	}
 }
 
