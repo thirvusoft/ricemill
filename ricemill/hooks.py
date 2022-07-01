@@ -31,8 +31,6 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-
-
 doctype_js = {
     "Work Order": "ricemill/custom/js/workorder.js",
     "Job Card": "ricemill/custom/js/job_card.js",
@@ -67,8 +65,6 @@ doctype_js = {
 # ------------
 
 # before_install = "ricemill.install.before_install"
-
-
 after_install = "ricemill.utils.after_install.after_install"
 # Uninstallation
 
@@ -105,19 +101,21 @@ after_install = "ricemill.utils.after_install.after_install"
 # ---------------
 # Hook on document methods and events
 
-
 doc_events = {
-    "Sales Invoice": {
-        "validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
-        "on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
-        # "on_trash": "method"
-    },
-    "Job Card": {
-        "before_submit": "ricemill.ricemill.custom.py.job_card.before_submit"
-    },
-    "Work Order": {
-        "before_submit": "ricemill.ricemill.custom.py.workorder.before_submit"
-    }
+	"Sales Invoice": {
+		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+		# "on_trash": "method"
+	},
+	"Job Card":{
+		"before_submit":"ricemill.ricemill.custom.py.job_card.before_submit"
+	},
+	"Work Order": {
+	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
+	},
+	"BOM": {
+		'validate': "ricemill.ricemill.custom.py.bom.validate"
+	}
 }
 
 # Scheduled Tasks
