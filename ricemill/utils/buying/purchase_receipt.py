@@ -1,3 +1,4 @@
+from cProfile import label
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
@@ -37,10 +38,12 @@ def purchase_receipt_customize_field():
                  read_only=1,
                  insert_after='column_break12'
                  ),
+            dict(fieldname="vechile_no",
+                 label='Vechile No',
+                 fieldtype='Data',
+                 insert_after='supplier_delivery_note'
+                 )
         ]
     }
 
     create_custom_fields(purchase_receipt_customize_field)
-
-
-
