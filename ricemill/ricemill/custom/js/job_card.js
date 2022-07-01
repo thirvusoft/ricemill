@@ -78,6 +78,7 @@ frappe.ui.form.on("Job Card",{
                 fields: fields,
                 primary_action: function () {
                     const data = dialog.get_values();
+                    console.log(data.items)
                     frappe.call({
                         method: "erpnext.controllers.stock_controller.make_quality_inspections",
                         args: {
