@@ -102,20 +102,23 @@ after_install = "ricemill.utils.after_install.after_install"
 # Hook on document methods and events
 
 doc_events = {
-	"Sales Invoice": {
-		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
-		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
-		# "on_trash": "method"
-	},
-	"Job Card":{
-		"before_submit":"ricemill.ricemill.custom.py.job_card.before_submit"
-	},
-	"Work Order": {
-	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
-	},
-	"BOM": {
-		'validate': "ricemill.ricemill.custom.py.bom.validate"
-	}
+    "Sales Invoice": {
+        "validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+        "on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+        # "on_trash": "method"
+    },
+    "Job Card": {
+        "before_submit": "ricemill.ricemill.custom.py.job_card.before_submit"
+    },
+    "Work Order": {
+        "before_submit": "ricemill.ricemill.custom.py.workorder.before_submit"
+    },
+    "BOM": {
+        'validate': "ricemill.ricemill.custom.py.bom.validate"
+    },
+    "Purchase Order": {
+        'validate': "ricemill.ricemill.custom.py.purchase_order.username_validate"
+    }
 }
 
 # Scheduled Tasks

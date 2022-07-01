@@ -37,6 +37,11 @@ def purchase_order_customize_field():
                  read_only=1,
                  insert_after='column_break12'
                  ),
+            dict(fieldname="user_name",
+                 label='User Name',
+                 fieldtype='Data',
+                 insert_after='inter_company_order_reference'
+                 ),
         ]
     }
 
