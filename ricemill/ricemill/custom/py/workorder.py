@@ -51,6 +51,7 @@ def change_status(wo, action=None):
         status = 'Cancelled'
     work_order.status = status
     work_order.save('Update')
+    frappe.db.commit()
 
 
 
