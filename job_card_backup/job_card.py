@@ -76,6 +76,9 @@ class JobCard(Document):
 				row.sub_operation = row.operation
 				self.append("sub_operations", row)
 
+	def before_submit(self):
+		frappe.db.set_value("Work Order",self.work_order,"qty",self.total_completed_qty)
+		frappe.db.commit()
 	def validate_time_logs(self):
 		self.total_time_in_mins = 0.0
 		self.total_completed_qty = 0.0
@@ -284,8 +287,6 @@ class JobCard(Document):
 		self.save()
 
 	def add_start_time_log(self, args):
-		if(len(self.time_logs)==0):
-			self.append("time_logs", [])
 		self.append("time_logs", args)
 
 	def set_employees(self, employees):

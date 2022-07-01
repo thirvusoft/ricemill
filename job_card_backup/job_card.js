@@ -23,7 +23,7 @@ frappe.ui.form.on('Job Card', {
 		);
 	},
 
-	before_submit: function(frm){
+	on_submit: function(frm){
 		let work_order_frm={};
 		frappe.db.get_doc("Work Order", frm.doc.work_order).then(function(data){
 			work_order_frm = data
@@ -46,7 +46,7 @@ frappe.ui.form.on('Job Card', {
 			let len=frm.doc.time_logs.length
 			frm.set_value('time_logs',[])
 			if(!len){
-			frm.reload_doc()
+			// frm.refresh()
 			}
 		}
 		frappe.flags.pause_job = 0;
