@@ -1172,104 +1172,110 @@ def set_work_order_ops(name):
 
 @frappe.whitelist()
 def make_stock_entry(work_order_id, purpose, qty=0, sw=None, tw = None):
-	work_order = frappe.get_doc("Work Order", work_order_id)
-	opr= frappe.get_value("Job Card",{'work_order':work_order_id},'operation')
-	operation = frappe.get_doc("Operation", opr)
-	se_item = ''
-	if(operation.grading == 1 or operation.soaking == 1 or operation.boiling == 1):
-		item = frappe.get_value("BOM Item",{'parent':work_order.bom_no},'item_code')
-		se_item = frappe.get_doc("Item",item)
-	else:
-		se_item = frappe.get_doc("Item",work_order.production_item)
-	company = work_order.company
-	abbr = frappe.get_value("Company",company, 'abbr')
-	parent_wo = frappe.get_value("Work Order", work_order_id, 'ts_parent_work_order')
-	se_name = frappe.get_value("Stock Entry", {'ts_work_order':parent_wo},'name')
-	batch_no = frappe.get_value("Batch",{'reference_doctype':'Stock Entry','reference_name':se_name},'name')
-	if not frappe.db.get_value("Warehouse", work_order.wip_warehouse, "is_group"):
-		wip_warehouse = work_order.wip_warehouse
-	else:
-		wip_warehouse = None
-	scrap_item = ''
-	
-	stock_entry = frappe.new_doc("Stock Entry")
-	stock_entry.ts_work_order = work_order_id
-	stock_entry.purpose = purpose
-	stock_entry.company = work_order.company
-	if(purpose == 'Repack'):pass
-		# return make_repack_sgp(work_order_id, purpose, qty, sw, tw, manufacturing_uom,repack_uom,batch)
-	else:
-		if(purpose not in  ["Material Transfer",'Repack']):
-			stock_entry.bom_no = work_order.bom_no
-			stock_entry.work_order = work_order_id
-			stock_entry.from_bom = 1
-			stock_entry.use_multi_level_bom = work_order.use_multi_level_bom
-			stock_entry.fg_completed_qty = flt(qty) or (flt(work_order.qty) - flt(work_order.produced_qty))
-			if work_order.bom_no:
-				stock_entry.inspection_required = frappe.db.get_value('BOM',
-				work_order.bom_no, 'inspection_required')
+	if(purpose != 'Repack'):
+		work_order = frappe.get_doc("Work Order", work_order_id)
+		opr= frappe.get_value("Job Card",{'work_order':work_order_id},'operation')
+		operation = frappe.get_doc("Operation", opr)
+		se_item = ''
+		if(operation.grading == 1 or operation.soaking == 1 or operation.boiling == 1):
+			item = frappe.get_value("BOM Item",{'parent':work_order.bom_no},'item_code')
+			se_item = frappe.get_doc("Item",item)
 		else:
+			se_item = frappe.get_doc("Item",work_order.production_item)
+		company = work_order.company
+		abbr = frappe.get_value("Company",company, 'abbr')
+		parent_wo = frappe.get_value("Work Order", work_order_id, 'ts_parent_work_order')
+		se_name = frappe.get_value("Stock Entry", {'ts_work_order':parent_wo},'name')
+		batch_no = frappe.get_value("Batch",{'reference_doctype':'Stock Entry','reference_name':se_name},'name')
+		if not frappe.db.get_value("Warehouse", work_order.wip_warehouse, "is_group"):
+			wip_warehouse = work_order.wip_warehouse
+		else:
+			wip_warehouse = None
+		scrap_item = ''
+		
+		stock_entry = frappe.new_doc("Stock Entry")
+		stock_entry.ts_work_order = work_order_id
+		stock_entry.purpose = purpose
+		stock_entry.company = work_order.company
+		if(purpose == 'Repack'):pass
+			# return make_repack_sgp(work_order_id, purpose, qty, sw, tw, manufacturing_uom,repack_uom,batch)
+		else:
+			if(purpose not in  ["Material Transfer",'Repack']):
+				stock_entry.bom_no = work_order.bom_no
+				stock_entry.work_order = work_order_id
+				stock_entry.from_bom = 1
+				stock_entry.use_multi_level_bom = work_order.use_multi_level_bom
+				stock_entry.fg_completed_qty = flt(qty) or (flt(work_order.qty) - flt(work_order.produced_qty))
+				if work_order.bom_no:
+					stock_entry.inspection_required = frappe.db.get_value('BOM',
+					work_order.bom_no, 'inspection_required')
+			else:
+				items ={ 
+					"item_code":se_item.item_code,
+					"item_group": se_item.item_group, 
+					"item_name":se_item.item_name, 
+					"qty": qty , 
+					"uom":se_item.stock_uom, 
+					"conversion_factor": 1 }
+				if(purpose != 'Manufacture'):items['batch_no'] = batch_no
+				stock_entry.append("items", items)
+				# from ganapathy_pavers.custom.py.warehouse import create_scrap_warehouse
+				# create_scrap_warehouse()
+				
+				from erpnext.manufacturing.doctype.bom.bom import add_additional_cost
+				add_additional_cost(stock_entry, work_order)
 			job_card = frappe.get_all("Job Card", filters={'work_order':work_order_id},pluck = 'name')[0]
 			jc_doc = frappe.get_doc("Job Card", job_card)
 			scrap_item = jc_doc.scrap_items
-			items ={ 
-				"item_code":se_item.item_code,
-				"item_group": se_item.item_group, 
-				"item_name":se_item.item_name, 
-				"qty": qty , 
-				"uom":se_item.stock_uom, 
-				"conversion_factor": 1 }
-			if(purpose != 'Manufacture'):items['batch_no'] = batch_no
-			stock_entry.append("items", items)
-			# from ganapathy_pavers.custom.py.warehouse import create_scrap_warehouse
-			# create_scrap_warehouse()
-			# for i in scrap_item:
-			# 	items ={ 
-			# 	"item_code":i.item_code,
-			# 	"item_group": frappe.get_value("Item", i.item_code, 'item_group'), 
-			# 	"item_name":i.item_name, 
-			# 	"qty": i.stock_qty , 
-			# 	"uom":i.stock_uom, 
-			# 	"conversion_factor": 1,
-			# 	"is_scrap_item": 1,
-			# 	"t_warehouse" : f'Scrap Warehouse - {abbr}',
-			# 	}
-			# 	if(purpose != 'Manufacture'):items['batch_no'] = batch_no
-			# 	stock_entry.append("items", items)
-			
-			from erpnext.manufacturing.doctype.bom.bom import add_additional_cost
-			add_additional_cost(stock_entry, work_order)
-		if purpose=="Material Transfer for Manufacture":
-			stock_entry.to_warehouse = wip_warehouse
-			stock_entry.project = work_order.project
-		else:
-			# stock_entry.from_warehouse = wip_warehouse
-			stock_entry.from_warehouse = sw
-			# stock_entry.to_warehouse = work_order.fg_warehouse
-			stock_entry.to_warehouse = tw
-			stock_entry.project = work_order.project
-		stock_entry.set_stock_entry_type()
-		if(purpose != "Material Transfer"):
-			stock_entry.get_items()
-			stock_entry.set_serial_no_batch_for_finished_good()
-		if(purpose != "Manufacture"):
-			## Move Remaining Items from Jobcard to Remaing Warehouse
-			job_card = frappe.get_all("Job Card", filters={'work_order':work_order_id},pluck = 'name')[0]
-			jc_doc = frappe.get_doc("Job Card", job_card)
-			se_item = frappe.get_doc("Item",work_order.production_item)
-		if purpose=="Manufacture":
-			if(tw):
-				for i in range(len(stock_entry.items)):
-					if(stock_entry.items[i].t_warehouse):
-						stock_entry.items[i].update({
-							't_warehouse': tw
-						})
-			
-		stock_entry.insert(ignore_mandatory=True, ignore_permissions=True)
-		stock_entry.submit()
-		from ricemill.ricemill.custom.py.workorder import change_status
-		change_status(work_order_id)
-		return stock_entry.as_dict()
+			for i in scrap_item:
+				items ={ 
+				"item_code":i.item_code,
+				"item_group": frappe.get_value("Item", i.item_code, 'item_group'), 
+				"item_name":i.item_name, 
+				"qty": i.stock_qty , 
+				"uom":i.stock_uom, 
+				"conversion_factor": 1,
+				"is_scrap_item": 1,
+				"t_warehouse" : tw,
+				}
+				if(purpose != 'Manufacture'):items['batch_no'] = batch_no
+				stock_entry.append("items", items)
+			if purpose=="Material Transfer for Manufacture":
+				stock_entry.to_warehouse = wip_warehouse
+				stock_entry.project = work_order.project
+			else:
+				# stock_entry.from_warehouse = wip_warehouse
+				stock_entry.from_warehouse = sw
+				# stock_entry.to_warehouse = work_order.fg_warehouse
+				stock_entry.to_warehouse = tw
+				stock_entry.project = work_order.project
+			stock_entry.set_stock_entry_type()
+			if(purpose != "Material Transfer"):
+				stock_entry.get_items()
+				stock_entry.set_serial_no_batch_for_finished_good()
+			if(purpose != "Manufacture"):
+				## Move Remaining Items from Jobcard to Remaing Warehouse
+				job_card = frappe.get_all("Job Card", filters={'work_order':work_order_id},pluck = 'name')[0]
+				jc_doc = frappe.get_doc("Job Card", job_card)
+				se_item = frappe.get_doc("Item",work_order.production_item)
+			if purpose=="Manufacture":
+				if(tw):
+					for i in range(len(stock_entry.items)):
+						if(stock_entry.items[i].t_warehouse):
+							stock_entry.items[i].update({
+								't_warehouse': tw
+							})
+						else:
+							stock_entry.items[i].update({
+								'batch_no': batch_no
+							})
+
+				
+			stock_entry.insert(ignore_mandatory=True, ignore_permissions=True)
+			stock_entry.submit()
+			from ricemill.ricemill.custom.py.workorder import change_status
+			change_status(work_order_id)
+			return stock_entry.as_dict()
 	
 
 
