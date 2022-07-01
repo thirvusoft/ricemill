@@ -3,7 +3,6 @@ frappe.ui.form.on("Job Card",{
     if(!frm.doc.employee.length){
         frm.set_value('time_logs',[])
         // frm.refresh()
-        console.log("Reached")
     }
     frm.add_custom_button(__("Quality Inspection(s)"), () => {
             let data = [];
