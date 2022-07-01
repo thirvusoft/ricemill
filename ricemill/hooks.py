@@ -34,11 +34,12 @@ app_license = "MIT"
 
 
 doctype_js = {
-	"Work Order" : "ricemill/custom/js/workorder.js",
-	"Job Card" : "ricemill/custom/js/job_card.js",
-	"Operation": "ricemill/custom/js/operation.js",
-  "Warehouse":"custom/warehouse.js"
-	}
+    "Work Order": "ricemill/custom/js/workorder.js",
+    "Job Card": "ricemill/custom/js/job_card.js",
+    "Operation": "ricemill/custom/js/operation.js",
+    "Purchase Order": "ricemill/custom/js/purchase_order.js"
+}
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -66,7 +67,7 @@ doctype_js = {
 # before_install = "ricemill.install.before_install"
 
 
-after_install ="ricemill.utils.after_install.after_install"
+after_install = "ricemill.utils.after_install.after_install"
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
@@ -104,38 +105,38 @@ after_install ="ricemill.utils.after_install.after_install"
 
 
 doc_events = {
-	"Sales Invoice": {
-		"validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
-		"on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
-		# "on_trash": "method"
-	},
-	"Job Card":{
-		"before_submit":"ricemill.ricemill.custom.py.job_card.before_submit"
-	},
-	"Work Order": {
-	"before_submit":"ricemill.ricemill.custom.py.workorder.before_submit"
-	}
+    "Sales Invoice": {
+        "validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
+        "on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
+        # "on_trash": "method"
+    },
+    "Job Card": {
+        "before_submit": "ricemill.ricemill.custom.py.job_card.before_submit"
+    },
+    "Work Order": {
+        "before_submit": "ricemill.ricemill.custom.py.workorder.before_submit"
+    }
 }
 
 # Scheduled Tasks
 # ---------------
 
 scheduler_events = {
-	# "all": [
-	# 	"ricemill.custom.note.remainder_note"
-	# ],
-	"daily": [
-		"ricemill.utils.desk.note.note.remainder_note"
-	],
-	# "hourly": [
-	# 	"ricemill.custom.note.remainder_note"
-	# ],
-	# "weekly": [
-	# 	"ricemill.tasks.weekly"
-	# ]
-	# "monthly": [
-	# 	"ricemill.tasks.monthly"
-	# ]
+    # "all": [
+    # 	"ricemill.custom.note.remainder_note"
+    # ],
+    "daily": [
+        "ricemill.utils.desk.note.note.remainder_note"
+    ],
+    # "hourly": [
+    # 	"ricemill.custom.note.remainder_note"
+    # ],
+    # "weekly": [
+    # 	"ricemill.tasks.weekly"
+    # ]
+    # "monthly": [
+    # 	"ricemill.tasks.monthly"
+    # ]
 }
 
 # Testing
@@ -166,24 +167,24 @@ scheduler_events = {
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization
