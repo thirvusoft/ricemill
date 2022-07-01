@@ -17,7 +17,7 @@ from ricemill.utils.stock.item.quality_inspection import quality_inspection_fiel
 from ricemill.utils.manufacturing.work_order.work_order import work_order_customize_field
 from ricemill.utils.manufacturing.job_card.jobcard import job_card_customize_field
 from ricemill.utils.buying.purchase_order import purchase_order_customize_field
-from ricemill.utils.stock.stock_entry.stock_entry import create_stock_entry_custom_field()
+from ricemill.utils.stock.stock_entry.stock_entry import create_stock_entry_custom_field
 
 
 def after_install():
