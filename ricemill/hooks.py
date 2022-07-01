@@ -32,10 +32,12 @@ app_license = "MIT"
 
 # include js in doctype views
 doctype_js = {
-	"Work Order" : "ricemill/custom/js/workorder.js",
-	"Job Card" : "ricemill/custom/js/job_card.js",
-	"Operation": "ricemill/custom/js/operation.js"
-	}
+    "Work Order": "ricemill/custom/js/workorder.js",
+    "Job Card": "ricemill/custom/js/job_card.js",
+    "Operation": "ricemill/custom/js/operation.js",
+    "Purchase Order": "ricemill/custom/js/purchase_order.js"
+}
+
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -118,21 +120,21 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-	# "all": [
-	# 	"ricemill.custom.note.remainder_note"
-	# ],
-	"daily": [
-		"ricemill.utils.desk.note.note.remainder_note"
-	],
-	# "hourly": [
-	# 	"ricemill.custom.note.remainder_note"
-	# ],
-	# "weekly": [
-	# 	"ricemill.tasks.weekly"
-	# ]
-	# "monthly": [
-	# 	"ricemill.tasks.monthly"
-	# ]
+    # "all": [
+    # 	"ricemill.custom.note.remainder_note"
+    # ],
+    "daily": [
+        "ricemill.utils.desk.note.note.remainder_note"
+    ],
+    # "hourly": [
+    # 	"ricemill.custom.note.remainder_note"
+    # ],
+    # "weekly": [
+    # 	"ricemill.tasks.weekly"
+    # ]
+    # "monthly": [
+    # 	"ricemill.tasks.monthly"
+    # ]
 }
 
 # Testing
@@ -163,24 +165,24 @@ scheduler_events = {
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization
