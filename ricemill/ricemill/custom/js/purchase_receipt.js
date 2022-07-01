@@ -1,4 +1,4 @@
-frappe.ui.form.on('Purchase Order Item', {
+frappe.ui.form.on('Purchase Receipt Item', {
     item_code: function (frm, cdt, cdn) {
         let row = locals[cdt][cdn]
         if (row.item_code) {

@@ -1,9 +1,10 @@
+from cProfile import label
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
-def purchase_order_customize_field():
-    purchase_order_customize_field = {
-        "Purchase Order": [
+def purchase_receipt_customize_field():
+    purchase_receipt_customize_field = {
+        "Purchase Receipt": [
             dict(fieldname="section_break1",
                  label='Last Purchase Item List Details',
                  fieldtype='Section Break',
@@ -37,12 +38,12 @@ def purchase_order_customize_field():
                  read_only=1,
                  insert_after='column_break12'
                  ),
-            dict(fieldname="user_name",
-                 label='User Name',
+            dict(fieldname="vechile_no",
+                 label='Vechile No',
                  fieldtype='Data',
-                 insert_after='inter_company_order_reference'
-                 ),
+                 insert_after='supplier_delivery_note'
+                 )
         ]
     }
 
-    create_custom_fields(purchase_order_customize_field)
+    create_custom_fields(purchase_receipt_customize_field)
