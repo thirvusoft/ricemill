@@ -1173,7 +1173,14 @@ def set_work_order_ops(name):
 @frappe.whitelist()
 def make_stock_entry(work_order_id, purpose, qty=0, sw=None, tw = None):
 	work_order = frappe.get_doc("Work Order", work_order_id)
-	se_item = frappe.get_doc("Item",work_order.production_item)
+	opr= frappe.get_value("Job Card",{'work_order':work_order_id},'operation')
+	operation = frappe.get_doc("Operation", opr)
+	se_item = ''
+	if(operation.grading == 1 or operation.soaking == 1 or operation.boiling == 1):
+		item = frappe.get_value("BOM Item",{'parent':work_order.bom_no},'item_code')
+		se_item = frappe.get_doc("Item",item)
+	else:
+		se_item = frappe.get_doc("Item",work_order.production_item)
 	company = work_order.company
 	abbr = frappe.get_value("Company",company, 'abbr')
 	parent_wo = frappe.get_value("Work Order", work_order_id, 'ts_parent_work_order')
@@ -1197,7 +1204,7 @@ def make_stock_entry(work_order_id, purpose, qty=0, sw=None, tw = None):
 			stock_entry.work_order = work_order_id
 			stock_entry.from_bom = 1
 			stock_entry.use_multi_level_bom = work_order.use_multi_level_bom
-			stock_entry.fg_completed_qty = qty or (flt(work_order.qty) - flt(work_order.produced_qty))
+			stock_entry.fg_completed_qty = flt(qty) or (flt(work_order.qty) - flt(work_order.produced_qty))
 			if work_order.bom_no:
 				stock_entry.inspection_required = frappe.db.get_value('BOM',
 				work_order.bom_no, 'inspection_required')
@@ -1253,12 +1260,11 @@ def make_stock_entry(work_order_id, purpose, qty=0, sw=None, tw = None):
 		if purpose=="Manufacture":
 			if(tw):
 				for i in range(len(stock_entry.items)):
-					stock_entry.items[i].update({
-						't_warehouse': tw
-					})
+					if(stock_entry.items[i].t_warehouse):
+						stock_entry.items[i].update({
+							't_warehouse': tw
+						})
 			
-			stock_entry.from_warehouse = sw
-			stock_entry.to_warehouse = tw
 		stock_entry.insert(ignore_mandatory=True, ignore_permissions=True)
 		stock_entry.submit()
 		from ricemill.ricemill.custom.py.workorder import change_status
