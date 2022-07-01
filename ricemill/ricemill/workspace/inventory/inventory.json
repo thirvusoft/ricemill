@@ -1,7 +1,7 @@
 {
  "category": "Modules",
  "charts": [],
- "creation": "2022-07-01 15:43:51.602566",
+ "creation": "2022-07-01 16:48:02.061429",
  "developer_mode_only": 0,
  "disable_user_customization": 0,
  "docstatus": 0,
@@ -11,32 +11,32 @@
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "label": "Sales User",
+ "label": "Inventory",
  "links": [],
- "modified": "2022-07-01 16:55:37.221547",
+ "modified": "2022-07-01 16:55:12.412499",
  "modified_by": "Administrator",
  "module": "Ricemill",
- "name": "Sales User",
+ "name": "Inventory",
  "owner": "Administrator",
  "pin_to_bottom": 0,
  "pin_to_top": 1,
  "shortcuts": [
   {
    "doc_view": "List",
-   "label": "Sales Order",
-   "link_to": "Sales Order",
+   "label": "Item",
+   "link_to": "Item",
    "type": "DocType"
   },
   {
    "doc_view": "List",
-   "label": "Delivery Note",
-   "link_to": "Delivery Note",
+   "label": "Item Group",
+   "link_to": "Item Group",
    "type": "DocType"
   },
   {
    "doc_view": "List",
-   "label": "Sales Invoice",
-   "link_to": "Sales Invoice",
+   "label": "Item Price",
+   "link_to": "Item Price",
    "type": "DocType"
   }
  ]

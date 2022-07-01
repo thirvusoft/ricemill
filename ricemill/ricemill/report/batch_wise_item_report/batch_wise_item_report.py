@@ -36,9 +36,9 @@ def execute(filters=None):
 									sed.batch_no as converted_batch,
 									sed.amount as output_amount,
 									sed.additional_cost as total_exp,
-									sed.parent
+									sed.parent , sed.s_warehouse
 								FROM `tabStock Entry Detail` as sed
-								where sed.s_warehouse = " " and sed.docstatus = 1 {0}
+								where  sed.docstatus = 1 and (sed.s_warehouse is NULL or sed.is_finished_item = 1) {0} 
 							""".format(cond),as_dict=1)
 	if len(parent)==0:
 		t_data=[]
