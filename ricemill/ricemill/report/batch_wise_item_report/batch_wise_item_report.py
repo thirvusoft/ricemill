@@ -61,12 +61,6 @@ def get_columns():
 			"width": 100
 		},
 		{
-			"label": _("pppp"),
-			"fieldtype": "Data",
-			"fieldname": "parent",
-			"width": 200
-		},
-		{
 			"label": _("Item Name"),
 			"fieldtype": "Data",
 			"fieldname": "item_name",
