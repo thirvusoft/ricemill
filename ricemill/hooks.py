@@ -37,7 +37,9 @@ doctype_js = {
     "Work Order": "ricemill/custom/js/workorder.js",
     "Job Card": "ricemill/custom/js/job_card.js",
     "Operation": "ricemill/custom/js/operation.js",
-    "Purchase Order": "ricemill/custom/js/purchase_order.js"
+    "Purchase Order": "ricemill/custom/js/purchase_order.js",
+    "Purchase Receipt": "ricemill/custom/js/purchase_receipt.js",
+    "Purchase Invoice": "ricemill/custom/js/purchase_invoice.js"
 }
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
