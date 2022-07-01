@@ -13,7 +13,6 @@ frappe.ui.form.on('Purchase Invoice Item', {
                         cur_frm.set_value("last_purchase_rate", r.message[2])
                         cur_frm.set_value("last_purchase_supplier", r.message[1])
                         frm.refresh();
-                        console.log(r.message)
                     }
                 }
             })
