@@ -16,11 +16,15 @@ from ricemill.custom.warehouse import create_fields
 from ricemill.utils.stock.item.quality_inspection import quality_inspection_fields
 from ricemill.utils.manufacturing.work_order.work_order import work_order_customize_field
 from ricemill.utils.manufacturing.job_card.jobcard import job_card_customize_field
+
+from ricemill.utils.stock.warehouse.warehouse import create_warehouse_fields
+
 from ricemill.utils.buying.purchase_order import purchase_order_customize_field
 from ricemill.utils.stock.stock_entry.stock_entry import create_stock_entry_custom_field
 from ricemill.utils.buying.supplier import supplier_custom_fields
 from ricemill.utils.buying.purchase_invoice import purchase_invoice_customize_field
 from ricemill.utils.buying.purchase_receipt import purchase_receipt_customize_field
+
 
 
 def after_install():
@@ -39,8 +43,13 @@ def after_install():
     quality_inspection_fields()
     work_order_customize_field()
     job_card_customize_field()
+
+    create_warehouse_fields()
+
+
     purchase_order_customize_field()
     purchase_invoice_customize_field()
     create_stock_entry_custom_field()
     purchase_receipt_customize_field()
     supplier_custom_fields()
+
