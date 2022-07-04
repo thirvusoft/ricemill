@@ -1,0 +1,43 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "creation": "2022-07-01 16:48:02.061429",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 0,
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Inventory",
+ "links": [],
+ "modified": "2022-07-01 16:55:12.412499",
+ "modified_by": "Administrator",
+ "module": "Ricemill",
+ "name": "Inventory",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 1,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Item Group",
+   "link_to": "Item Group",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Item Price",
+   "link_to": "Item Price",
+   "type": "DocType"
+  }
+ ]
+}
