@@ -115,6 +115,9 @@ doc_events = {
     },
     "Work Order": {
         "before_submit": "ricemill.ricemill.custom.py.workorder.before_submit"
+    },
+    "Bin":{
+        "validate":"ricemill.utils.stock.bin.bin.stock_level"
     }
 }
 
