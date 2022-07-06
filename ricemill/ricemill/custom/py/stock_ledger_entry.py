@@ -8,7 +8,7 @@ def validate_warehouse(doc, action):
     if doc.doctype == "Purchase Invoice":
         if doc.update_stock == 0:
             return
-
+    if(doc.doctype not in ['Purchase Invoice', 'Purchase Receipt']):return
     dict = {}
     for items in doc.items:
         if items.warehouse not in dict.keys():
@@ -123,6 +123,5 @@ def create_stock(self, act_as, batch):
                     item_code=self.item_code
                 ),
             )
-
-            stock_entry.insert()
-            stock_entry.save()
+        stock_entry.insert()
+        stock_entry.save()
