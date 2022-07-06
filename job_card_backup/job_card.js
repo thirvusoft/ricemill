@@ -35,8 +35,10 @@ frappe.ui.form.on('Job Card', {
 				'sw' : frm.doc.ts_source_warehouse,
 				'tw' : frm.doc.ts_target_warehouse,
 			}).then(stock_entry => {
+				if(stock_entry){
 				frappe.model.sync(stock_entry);
 				frappe.set_route('Form', stock_entry.doctype, stock_entry.name);
+				}
 			});
 		})
 	},
