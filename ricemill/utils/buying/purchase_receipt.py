@@ -42,8 +42,40 @@ def purchase_receipt_customize_field():
                  label='Vechile No',
                  fieldtype='Data',
                  insert_after='supplier_delivery_note'
+                 ),
+        ],
+        "Purchase Receipt Item": [
+            dict(fieldname="batch_configuration",
+                 label='Batch Configuration',
+                 fieldtype='Select',
+                 options='\nMerge with Existing Batch\nMerge with Incoming Batch\nSeparate Batch',
+                 read_only=0,
+                 ),
+            dict(fieldname="select_batch",
+                 label='Select Batch',
+                 fieldtype='Link',
+                 options="Batch",
+                 mandatory_depends_on="eval:doc.batch_configuration == 'Merge with Existing Batch' || doc.batch_configuration == 'Merge with Incoming Batch' ",
+                 depends_on=	"eval:doc.batch_configuration == 'Merge with Existing Batch' || doc.batch_configuration == 'Merge with Incoming Batch' "
+                 
                  )
         ]
     }
 
     create_custom_fields(purchase_receipt_customize_field)
+import frappe
+def batch_configuration(self,action):
+     for i in self.items:
+          warehouse=frappe.get_doc("Warehouse",i.warehouse)
+          warehouse_qty=sum(frappe.db.get_all("Bin",pluck="actual_qty" ,filters={"warehouse":i.warehouse}))
+          if warehouse.warehouse_capacity <= warehouse_qty:
+               if warehouse.message == 1:
+                    if warehouse.allow_as_batch == "Merge with Existing Batch":
+                         i.batch_configuration = "Merge with Existing Batch"
+                    elif warehouse.allow_as_batch == "Merge with Incoming Batch":
+                         i.batch_configuration = "Merge with Incoming Batch"
+                    elif warehouse.allow_as_batch == "Separate Batch":
+                         i.batch_configuration = "Separate Batch"
+                    else:
+                         i.batch_configuration = warehouse.allow_as_batch
+
