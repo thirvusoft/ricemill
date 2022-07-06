@@ -79,6 +79,8 @@ class JobCard(Document):
 	def before_submit(self):
 		frappe.db.set_value("Work Order",self.work_order,"qty",self.total_completed_qty)
 		frappe.db.commit()
+		if(not frappe.get_value("Stock Entry", {'ts_work_order':self.work_order, 'docstatus':1}, 'name') and frappe.get_value("Operation", self.operation, 'hulling') == 1):
+			frappe.throw("Don't submit this form. Instead Click <b>Create > Stock Entry</b>")
 	def validate_time_logs(self):
 		self.total_time_in_mins = 0.0
 		self.total_completed_qty = 0.0
