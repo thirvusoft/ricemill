@@ -108,12 +108,11 @@ def make_repack(items, length, work_order_id, purpose, qty=0, sw=None, tw = None
         }
         if(purpose != 'Manufacture'):items['batch_no'] = batch_no
         stock_entry.append("items", items)
-    # stock_entry.from_warehouse = sw
-    # stock_entry.to_warehouse = tw
     stock_entry.project = work_order.project
     stock_entry.set_stock_entry_type()
     stock_entry.insert(ignore_mandatory=True, ignore_permissions=True)
     stock_entry.submit()
+    jc_doc.submit()
     from ricemill.ricemill.custom.py.workorder import change_status
     change_status(work_order_id)
     frappe.db.commit()
