@@ -60,11 +60,22 @@ frappe.ui.form.on('Purchase Receipt', {
     }),
     frm.set_query('select_item_conversion_batch','items', function(frm, cdt, cdn) {
         var item = locals[cdt][cdn];
-        return {
-            filters: {
-                "item": item.ts_select_item_conversion,
+        if(!item.item_code) {
+            frappe.throw(__("Please enter Item Code to get Batch Number"));
+        } else {
+                var filters = {
+                    'item_code': item.ts_select_item_conversion,
+                    'posting_date': frappe.datetime.nowdate()
+            
+                }
+            // User could want to select a manually created empty batch (no warehouse)
+            // or a pre-existing batch
+                filters["warehouse"] = item.warehouse || item.t_warehouse;
+            return {
+                query : "erpnext.controllers.queries.get_batch_no",
+                filters: filters
             }
-        };
+        }
     });
 }
 })
