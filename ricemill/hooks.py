@@ -39,7 +39,7 @@ doctype_js = {
     "Purchase Order": "ricemill/custom/js/purchase_order.js",
     "Purchase Receipt": "ricemill/custom/js/purchase_receipt.js",
     "Purchase Invoice": "ricemill/custom/js/purchase_invoice.js",
-    "Warehouse":"ricemill/custom/js/warehouse.js"
+    "Warehouse": "ricemill/custom/js/warehouse.js"
 }
 
 
@@ -108,7 +108,7 @@ after_install = "ricemill.utils.after_install.after_install"
 
 doc_events = {
 
-	
+
     "Sales Invoice": {
         "validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
         "on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
@@ -126,9 +126,13 @@ doc_events = {
     "Purchase Order": {
         'validate': "ricemill.ricemill.custom.py.purchase_order.username_validate"
     },
-    "Stock Ledger Entry":{
-		"before_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
-	}
+
+    "Purchase Invoice": {
+        "before_submit": "ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
+    },
+    "Purchase Receipt": {
+        "before_submit": "ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
+    }
 
 }
 

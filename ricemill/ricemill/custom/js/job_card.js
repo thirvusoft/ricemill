@@ -1,12 +1,11 @@
-frappe.ui.form.on("Job Card",{
-   "refresh":function(frm){
-    if(!frm.doc.employee.length){
-        frm.set_value('time_logs',[])
-        // frm.refresh()
-    }
-    frm.add_custom_button(__("Quality Inspection(s)"), () => {
+frappe.ui.form.on("Job Card", {
+    "refresh": function (frm) {
+        if (!frm.doc.employee.length) {
+            frm.set_value('time_logs', [])
+        }
+        frm.add_custom_button(__("Quality Inspection(s)"), () => {
             let data = [];
-            var item =cur_frm.doc.production_item
+            var item = cur_frm.doc.production_item
             const fields = [
                 {
                     label: "Items",
@@ -72,13 +71,12 @@ frappe.ui.form.on("Job Card",{
                     ]
                 }
             ];
-        
+
             const dialog = new frappe.ui.Dialog({
                 title: __("Select Items for Quality Inspection"),
                 fields: fields,
                 primary_action: function () {
                     const data = dialog.get_values();
-                    console.log(data.items)
                     frappe.call({
                         method: "erpnext.controllers.stock_controller.make_quality_inspections",
                         args: {
@@ -105,30 +103,26 @@ frappe.ui.form.on("Job Card",{
                 },
                 primary_action_label: __("Create")
             });
-        
-            // frm.doc.items.forEach(item => {
-                // if (!frm.doc.production_itemquality_inspection) {
-                    var bomitem=[]
-                    let dialog_items = dialog.fields_dict.items;
-                    frappe.db.get_list("BOM Item",{filters:{'parent':frm.doc.bom_no},fields:["item_code","item_name"]}).then((bom_item)=>{
-                        bom_item.forEach((item)=>{ 
-                            dialog_items.df.data.push({
-                                "docname": frm.doc.name,
-                                "item_code": item.item_code,
-                                "item_name": item.item_name,
-                            });
-                            dialog_items.grid.refresh();
-                            data = dialog.fields_dict.items.df.data;
-                                if (!data.length) {
-                                    frappe.msgprint(__("All items in this document already have a linked Quality Inspection."));
-                                } else {
-                                    dialog.show();
-                                }
-                        })
-                    })
-            
-        }, __("Create"));
-    
-}
+            let dialog_items = dialog.fields_dict.items;
+            frappe.db.get_list("BOM Item", { filters: { 'parent': frm.doc.bom_no }, fields: ["item_code", "item_name"] }).then((bom_item) => {
+                bom_item.forEach((item) => {
+                    dialog_items.df.data.push({
+                        "docname": frm.doc.name,
+                        "item_code": item.item_code,
+                        "item_name": item.item_name,
+                    });
+                    dialog_items.grid.refresh();
+                    data = dialog.fields_dict.items.df.data;
+                    if (!data.length) {
+                        frappe.msgprint(__("All items in this document already have a linked Quality Inspection."));
+                    } else {
+                        dialog.show();
+                    }
+                })
+            }
+            )
 
+        }, __("Create"));
+
+    }
 })

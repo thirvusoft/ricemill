@@ -46,6 +46,11 @@ def job_card_customize_field():
                  reqd=1,
                  insert_after='column_break2'
                  ),
+            dict(fieldname="weightuom",
+                 label='Weight Uom',
+                 fieldtype='Data',
+                 insert_after='batch_no'
+                 ),
         ]
     }
 
