@@ -8,34 +8,24 @@ def validate_warehouse(doc, action):
         if doc.update_stock == 0:
             return
 
-    m = {}
-    for i in doc.items:
-        if i.warehouse not in m.keys():
-            m[i.warehouse] = i.qty
+    dict = {}
+    for items in doc.items:
+        if items.warehouse not in dict.keys():
+            dict[items.warehouse] = items.qty
         else:
-            m[i.warehouse] = m[i.warehouse] + i.qty
-    for j in list(m.keys()):
+            dict[items.warehouse] = dict[items.warehouse] + items.qty
+    for keys in list(dict.keys()):
 
         bin = sum(frappe.db.get_all(
-            "Bin", {"warehouse": j}, pluck="actual_qty"))
-        m[j] = m[j]+bin
+            "Bin", {"warehouse": keys}, pluck="actual_qty"))
+        dict[keys] = dict[keys]+bin
 
-    for k in list(m.keys()):
+    for value in list(dict.keys()):
         warehouse, block = frappe.db.get_value(
-            "Warehouse", k, ["warehouse_capacity", "block"])
-        if block == 1 and m[j] > warehouse:
+            "Warehouse", value, ["warehouse_capacity", "block"])
+        if block == 1 and dict[value] > warehouse:
             frappe.throw(
-                f"Capacity of the Warehouse is {warehouse} . You try to reach the limit. Exisiting Capacity {sum(frappe.db.get_all('Bin', {'warehouse': k}, pluck='actual_qty'))}. Inward quantity is {m[k]-sum(frappe.db.get_all('Bin', {'warehouse': k}, pluck='actual_qty'))}")
-
-    # warehouse = frappe.get_doc("Warehouse", i.warehouse)
-    # if warehouse.capacity == 1:
-    #     get_valuation_rate(warehouse)
-    #     warehouse_qty = get_valuation_rate(warehouse)+i.qty
-    #     if warehouse.block == 1 and warehouse_qty > warehouse.warehouse_capacity:
-    #         frappe.throw(
-    #             f"Capacity of the Warehouse is {warehouse.warehouse_capacity}. You try to reach the limit")
-    #     elif(warehouse.block == 0):
-    #         frappe.throw("In this warehouse transacations are not allowed")
+                f"Capacity of the Warehouse is {warehouse} . You try to reach the limit. Exisiting Capacity {sum(frappe.db.get_all('Bin', {'warehouse': value}, pluck='actual_qty'))}. Inward quantity is {dict[value]-sum(frappe.db.get_all('Bin', {'warehouse': value}, pluck='actual_qty'))}")
 
 
 def get_valuation_rate(warehouse):

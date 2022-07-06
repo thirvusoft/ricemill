@@ -898,7 +898,7 @@ def get_job_details(start, end, filters=None):
 		FROM `tabJob Card` , `tabJob Card Time Log`
 		WHERE
 			`tabJob Card`.name = `tabJob Card Time Log`.parent {0}
-			group by `tabJob Card`.name""".format(
+            group by `tabJob Card`.name""".format(
             conditions
         ),
         as_dict=1,

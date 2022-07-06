@@ -783,8 +783,8 @@ def future_sle_exists(args, sl_entries=None):
 			and voucher_no != %(voucher_no)s
 			and is_cancelled = 0
 		GROUP BY
-			item_code, warehouse
-		""".format(
+        item_code, warehouse
+            """.format(
             " or ".join(or_conditions)
         ),
         args,
@@ -847,7 +847,7 @@ def get_conditions_to_validate_future_sle(sl_entries):
     for warehouse, items in warehouse_items_map.items():
         or_conditions.append(
             f"""warehouse = {frappe.db.escape(warehouse)}
-				and item_code in ({', '.join(frappe.db.escape(item) for item in items)})"""
+            and item_code in ({', '.join(frappe.db.escape(item) for item in items)})"""
         )
 
     return or_conditions

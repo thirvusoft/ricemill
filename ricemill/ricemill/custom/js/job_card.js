@@ -5,7 +5,7 @@ frappe.ui.form.on("Job Card", {
         }
         frm.add_custom_button(__("Quality Inspection(s)"), () => {
             let data = [];
-            var item = cur_frm.doc.production_item
+            var item = frm.doc.production_item
             const fields = [
                 {
                     label: "Items",
@@ -114,7 +114,7 @@ frappe.ui.form.on("Job Card", {
                     dialog_items.grid.refresh();
                     data = dialog.fields_dict.items.df.data;
                     if (!data.length) {
-                        frappe.msgprint(__("All items in this document already have a linked Quality Inspection."));
+                        alert(__("All items in this document already have a linked Quality Inspection."));
                     } else {
                         dialog.show();
                     }
