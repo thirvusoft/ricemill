@@ -128,6 +128,71 @@ frappe.ui.form.on("Job Card",{
             
         }, __("Create"));
     
-}
+    },
+    onload: async function(frm){
+        frappe.call({
+            method:"ricemill.ricemill.custom.py.job_card.repack_dialog",
+            async:false,
+            freeze:true,
+            freeze_message: "Please wait...",
+            args:{
+                item:frm.doc.production_item,
+                operation: frm.doc.operation,
+                qty: frm.doc.total_completed_qty   
+            },
+             callback:  function(r){
+                if(r.message[0]){
+                    let count =0, total_qty = frm.doc.total_completed_qty
+                    var func = function (){
+                        var used_qty = 0;
+                        for(let i=1;i<=r.message[1];i++){
+                            used_qty += d.fields_dict['qty'+i].value * d.fields_dict['conv'+i].value    
+                        }   
+                        d.fields_dict['remaining_qty'].value = d.fields_dict.total_qty.value - used_qty
+                        d.fields_dict['remaining_qty'].refresh()
+                       
+                    }
+                    r.message[0].forEach((data)=>{
+                        if(data['fieldname'].indexOf('qty') >= 0 && data['fieldname']!='total_qty' && data['fieldname']!='remaining_qty'){
+                                r.message[0][count]['onchange']=func
+                        }
+                        count+=1
+                    })
+                    var d =  new frappe.ui.Dialog({
+                        title: "Repack details for hulling operation",
+                        fields: r.message[0],
+                        freeze: true,
+                        static:true,
+                        primary_action: function(data){
+                            if(d.fields_dict.remaining_qty.value == 0 || d.fields_dict.remaining_qty.value == null){
+                                frappe.call({
+                                    method: "ricemill.ricemill.custom.py.job_card.make_repack",
+                                    args:{
+                                        items: data,
+                                        length:r.message[1],
+                                        work_order_id : cur_frm.doc.work_order,
+                                        purpose : cur_frm.doc.ts_stock_entry_type,
+                                        qty : cur_frm.doc.total_completed_qty,
+                                        sw : cur_frm.doc.ts_source_warehouse, 
+                                        tw : cur_frm.doc.ts_target_warehouse
+                                    },
+                                    callback(r){
+                                        frappe.model.sync(r.message);
+				                        frappe.set_route('Form', r.message.doctype, r.message.name);
+                                    }
+                                })
+                                d.hide();
+                            }
+                            else{
+                                frappe.throw("Remaining qty must be equal to zero")
+                            }
+                        }
+                    })
+                    d.show()
+                }
+            }
+        })
+    }
 
 })
+
