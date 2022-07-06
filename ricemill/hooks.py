@@ -127,9 +127,13 @@ doc_events = {
         'validate': "ricemill.ricemill.custom.py.purchase_order.username_validate"
     },
     "Stock Ledger Entry":{
-		"before_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
-	}
-
+		"before_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse",
+        "on_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.create_stock_entry"
+	},
+    "Purchase Receipt":{
+        "validate":"ricemill.utils.buying.purchase_receipt.batch_configuration",
+        # "on_submit":"ricemill.utils.buying.purchase_receipt.create_stock_entry"
+    }
 }
 
 # Scheduled Tasks

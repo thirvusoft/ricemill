@@ -9,7 +9,21 @@ def create_stock_entry_custom_field():
             fieldtype="Data",
             insert_after="work_order",
             read_only = 1
-            )
+            ),
+            dict(fieldname="ts_ref_doctype",
+            label="Ref Doctype",
+            fieldtype="Data",
+            insert_after="is_opening",
+            read_only = 1,
+            hidden = 1
+            ),
+            dict(fieldname="ts_ref_document",
+            label="Ref Document",
+            fieldtype="Data",
+            insert_after="per_transferred",
+            read_only = 1,
+            hidden =1,
+            ),
         ]
     }
     create_custom_fields(se_fields)

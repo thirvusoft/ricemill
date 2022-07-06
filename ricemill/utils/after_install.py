@@ -12,7 +12,7 @@ from ricemill.utils.manufacturing.operation.operation import operation_customize
 from ricemill.utils.manufacturing.work_order.work_order import customize_work_order
 from ricemill.utils.manufacturing.job_card.jobcard import customize
 from ricemill.utils.manufacturing.job_card_time_log.job_card_time_log import job_card_time_log_customize_field
-from ricemill.custom.warehouse import create_fields
+# from ricemill.custom.warehouse import create_fields
 from ricemill.utils.stock.item.quality_inspection import quality_inspection_fields
 from ricemill.utils.manufacturing.work_order.work_order import work_order_customize_field
 from ricemill.utils.manufacturing.job_card.jobcard import job_card_customize_field
@@ -39,7 +39,7 @@ def after_install():
     customize_work_order()
     customize()
     job_card_time_log_customize_field()
-    create_fields()
+    # create_fields()
     quality_inspection_fields()
     work_order_customize_field()
     job_card_customize_field()
