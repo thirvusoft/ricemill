@@ -1,6 +1,6 @@
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from frappe.custom.doctype.property_setter.property_setter import make_property_setter
-
+import frappe
 def customize_work_order():
   work_order_customize_field()
   work_card_property_setter()
@@ -13,7 +13,8 @@ def work_order_customize_field():
                 fieldtype='Table',
                 options='TS Work Order Status',
                 insert_after='company',
-                read_only=1
+                read_only=1,
+                allow_on_submit=1
                 ),
                 dict(fieldname='ts_parent_work_order',
                     label='Parent WorkOrder',
@@ -44,11 +45,12 @@ def work_order_customize_field():
             ]
             }
         create_custom_fields(work_order_custom_field)
-def work_card_property_setter():                
+def work_card_property_setter():    
+    make_property_setter("Work Order", "status", "allow_on_submit", 1, "Check")            
     make_property_setter("Work Order", "sales_order", "hidden", 1, "Check")
     make_property_setter("Work Order", "project", "hidden", 1, "Check")
     make_property_setter("Work Order", "settings_section", "hidden", 1, "Check")
     make_property_setter("Work Order", "warehouses", "hidden", 1, "Check")
     make_property_setter("Work Order", "time", "hidden", 1, "Check")
     make_property_setter("Work Order", "more_info", "hidden", 1, "Check")
-
+    frappe.db.commit()

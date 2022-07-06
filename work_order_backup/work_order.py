@@ -84,7 +84,7 @@ class WorkOrder(Document):
 		self.calculate_operating_cost()
 		self.validate_qty()
 		self.validate_transfer_against()
-		self.validate_operation_time()
+		# self.validate_operation_time()
 		self.status = self.get_status()
 
 		validate_uom_is_integer(self, "stock_uom", ["qty", "produced_qty"])
@@ -665,7 +665,7 @@ class WorkOrder(Document):
 						parent = %s  and operation = "{operation_name}"
 					""", bom_no, as_dict=1)
 
-		
+
 		self.set('operations', [])
 		if not self.bom_no or not frappe.get_cached_value('BOM', self.bom_no, 'with_operations'):
 			return
@@ -676,16 +676,18 @@ class WorkOrder(Document):
 			bom_tree = frappe.get_doc("BOM", self.bom_no).get_tree_representation()
 			bom_traversal = reversed(bom_tree.level_order_traversal())
 
-			for node in bom_traversal:
-				if node.is_bom:
-					operations.extend(_get_operations(node.name, operation_name, qty=node.exploded_qty))
-		if(not len(operations)):
-			bom_qty = frappe.db.get_value("BOM", self.bom_no, "quantity")
-			operations.extend(_get_operations(self.bom_no, operation_name, qty=1.0/bom_qty))
+			# for node in bom_traversal:
+			# 	if node.is_bom:
+			# 		print(operation_name,"::::::::::::::::", node.name)
+			# 		operations.extend(_get_operations(node.name, operation_name, qty=node.exploded_qty))
 
+		bom_qty = frappe.db.get_value("BOM", self.bom_no, "quantity")
+		operations.extend(_get_operations(self.bom_no, operation_name, qty=1.0/bom_qty))
+		print(operations)
 		for correct_index, operation in enumerate(operations, start=1):
 			operation.idx = correct_index
 		operations = [i for i in operations if(i['operation'] == operation_name)]
+		
 		self.set('operations', operations)
 		self.calculate_time()
 
@@ -732,8 +734,8 @@ class WorkOrder(Document):
 				d.status = "Completed"
 			elif flt(d.completed_qty) <= max_allowed_qty_for_wo:
 				d.status = "Completed"
-			# else:
-			# 	frappe.throw(_("Completed Qty cannot be greater than 'Qty to Manufacture'"))
+			else:
+				frappe.throw(_("Completed Qty cannot be greater than 'Qty to Manufacture'"))
 
 	def set_actual_dates(self):
 		if self.get("operations"):
@@ -1171,112 +1173,42 @@ def set_work_order_ops(name):
 
 
 @frappe.whitelist()
-def make_stock_entry(work_order_id, purpose, qty=0, sw=None, tw = None):
-	if(purpose != 'Repack'):
-		work_order = frappe.get_doc("Work Order", work_order_id)
-		opr= frappe.get_value("Job Card",{'work_order':work_order_id},'operation')
-		operation = frappe.get_doc("Operation", opr)
-		se_item = ''
-		if(operation.grading == 1 or operation.soaking == 1 or operation.boiling == 1):
-			item = frappe.get_value("BOM Item",{'parent':work_order.bom_no},'item_code')
-			se_item = frappe.get_doc("Item",item)
-		else:
-			se_item = frappe.get_doc("Item",work_order.production_item)
-		company = work_order.company
-		abbr = frappe.get_value("Company",company, 'abbr')
-		parent_wo = frappe.get_value("Work Order", work_order_id, 'ts_parent_work_order')
-		se_name = frappe.get_value("Stock Entry", {'ts_work_order':parent_wo},'name')
-		batch_no = frappe.get_value("Batch",{'reference_doctype':'Stock Entry','reference_name':se_name},'name')
-		if not frappe.db.get_value("Warehouse", work_order.wip_warehouse, "is_group"):
-			wip_warehouse = work_order.wip_warehouse
-		else:
-			wip_warehouse = None
-		scrap_item = ''
-		
-		stock_entry = frappe.new_doc("Stock Entry")
-		stock_entry.ts_work_order = work_order_id
-		stock_entry.purpose = purpose
-		stock_entry.company = work_order.company
-		if(purpose == 'Repack'):pass
-			# return make_repack_sgp(work_order_id, purpose, qty, sw, tw, manufacturing_uom,repack_uom,batch)
-		else:
-			if(purpose not in  ["Material Transfer",'Repack']):
-				stock_entry.bom_no = work_order.bom_no
-				stock_entry.work_order = work_order_id
-				stock_entry.from_bom = 1
-				stock_entry.use_multi_level_bom = work_order.use_multi_level_bom
-				stock_entry.fg_completed_qty = flt(qty) or (flt(work_order.qty) - flt(work_order.produced_qty))
-				if work_order.bom_no:
-					stock_entry.inspection_required = frappe.db.get_value('BOM',
-					work_order.bom_no, 'inspection_required')
-			else:
-				items ={ 
-					"item_code":se_item.item_code,
-					"item_group": se_item.item_group, 
-					"item_name":se_item.item_name, 
-					"qty": qty , 
-					"uom":se_item.stock_uom, 
-					"conversion_factor": 1 }
-				if(purpose != 'Manufacture'):items['batch_no'] = batch_no
-				stock_entry.append("items", items)
-				# from ganapathy_pavers.custom.py.warehouse import create_scrap_warehouse
-				# create_scrap_warehouse()
-				
-				from erpnext.manufacturing.doctype.bom.bom import add_additional_cost
-				add_additional_cost(stock_entry, work_order)
-			job_card = frappe.get_all("Job Card", filters={'work_order':work_order_id},pluck = 'name')[0]
-			jc_doc = frappe.get_doc("Job Card", job_card)
-			scrap_item = jc_doc.scrap_items
-			for i in scrap_item:
-				items ={ 
-				"item_code":i.item_code,
-				"item_group": frappe.get_value("Item", i.item_code, 'item_group'), 
-				"item_name":i.item_name, 
-				"qty": i.stock_qty , 
-				"uom":i.stock_uom, 
-				"conversion_factor": 1,
-				"is_scrap_item": 1,
-				"t_warehouse" : tw,
-				}
-				if(purpose != 'Manufacture'):items['batch_no'] = batch_no
-				stock_entry.append("items", items)
-			if purpose=="Material Transfer for Manufacture":
-				stock_entry.to_warehouse = wip_warehouse
-				stock_entry.project = work_order.project
-			else:
-				# stock_entry.from_warehouse = wip_warehouse
-				stock_entry.from_warehouse = sw
-				# stock_entry.to_warehouse = work_order.fg_warehouse
-				stock_entry.to_warehouse = tw
-				stock_entry.project = work_order.project
-			stock_entry.set_stock_entry_type()
-			if(purpose != "Material Transfer"):
-				stock_entry.get_items()
-				stock_entry.set_serial_no_batch_for_finished_good()
-			if(purpose != "Manufacture"):
-				## Move Remaining Items from Jobcard to Remaing Warehouse
-				job_card = frappe.get_all("Job Card", filters={'work_order':work_order_id},pluck = 'name')[0]
-				jc_doc = frappe.get_doc("Job Card", job_card)
-				se_item = frappe.get_doc("Item",work_order.production_item)
-			if purpose=="Manufacture":
-				if(tw):
-					for i in range(len(stock_entry.items)):
-						if(stock_entry.items[i].t_warehouse):
-							stock_entry.items[i].update({
-								't_warehouse': tw
-							})
-						else:
-							stock_entry.items[i].update({
-								'batch_no': batch_no
-							})
+def make_stock_entry(work_order_id, purpose, qty=None):
+	work_order = frappe.get_doc("Work Order", work_order_id)
+	if not frappe.db.get_value("Warehouse", work_order.wip_warehouse, "is_group"):
+		wip_warehouse = work_order.wip_warehouse
+	else:
+		wip_warehouse = None
 
-				
-			stock_entry.insert(ignore_mandatory=True, ignore_permissions=True)
-			stock_entry.submit()
-			from ricemill.ricemill.custom.py.workorder import change_status
-			change_status(work_order_id)
-			return stock_entry.as_dict()
-	
+	stock_entry = frappe.new_doc("Stock Entry")
+	stock_entry.purpose = purpose
+	stock_entry.work_order = work_order_id
+	stock_entry.company = work_order.company
+	stock_entry.from_bom = 1
+	stock_entry.bom_no = work_order.bom_no
+	stock_entry.use_multi_level_bom = work_order.use_multi_level_bom
+	# accept 0 qty as well
+	stock_entry.fg_completed_qty = (
+		qty if qty is not None else (flt(work_order.qty) - flt(work_order.produced_qty))
+	)
+
+	if work_order.bom_no:
+		stock_entry.inspection_required = frappe.db.get_value(
+			"BOM", work_order.bom_no, "inspection_required"
+		)
+
+	if purpose == "Material Transfer for Manufacture":
+		stock_entry.to_warehouse = wip_warehouse
+		stock_entry.project = work_order.project
+	else:
+		stock_entry.from_warehouse = wip_warehouse
+		stock_entry.to_warehouse = work_order.fg_warehouse
+		stock_entry.project = work_order.project
+
+	stock_entry.set_stock_entry_type()
+	stock_entry.get_items()
+	stock_entry.set_serial_no_batch_for_finished_good()
+	return stock_entry.as_dict()
 
 
 @frappe.whitelist()
@@ -1423,35 +1355,26 @@ def validate_operation_data(row):
 
 def create_job_card(work_order, row, enable_capacity_planning=False, auto_create=False):
 	doc = frappe.new_doc("Job Card")
-	sw,tw,se_type = '', '', ''
-	if(row.get("operation")):
-		wo = frappe.get_doc("Work Order",work_order.name)
-		for i in wo.operations:
-			if(i.get('operation') == row.get('operation')):
-				sw=i.get('ts_source_warehouse')
-				tw=i.get('ts_target_warehouse')
-				se_type=i.get('ts_stock_entry_type')
-	doc.update({
-		'work_order': work_order.name,
-		'operation': row.get("operation"),
-		'workstation': row.get("workstation"),
-		'posting_date': nowdate(),
-		'for_quantity': row.job_card_qty or work_order.get('qty', 0),
-		'operation_id': row.get("name"),
-		'bom_no': work_order.bom_no,
-		'project': work_order.project,
-		'company': work_order.company,
-		'sequence_id': row.get("sequence_id"),
-		'wip_warehouse': work_order.wip_warehouse,
-		'hour_rate': row.get("hour_rate"),
-		'serial_no': row.get("serial_no"),
-		'ts_source_warehouse': sw,
-		'ts_target_warehouse': tw,
-		'ts_stock_entry_type': se_type
-	})
-	if work_order.transfer_material_against == 'Job Card' and not work_order.skip_transfer:
-		doc.get_required_items()
+	doc.update(
+		{
+			"work_order": work_order.name,
+			"operation": row.get("operation"),
+			"workstation": row.get("workstation"),
+			"posting_date": nowdate(),
+			"for_quantity": row.job_card_qty or work_order.get("qty", 0),
+			"operation_id": row.get("name"),
+			"bom_no": work_order.bom_no,
+			"project": work_order.project,
+			"company": work_order.company,
+			"sequence_id": row.get("sequence_id"),
+			"wip_warehouse": work_order.wip_warehouse,
+			"hour_rate": row.get("hour_rate"),
+			"serial_no": row.get("serial_no"),
+		}
+	)
 
+	if work_order.transfer_material_against == "Job Card" and not work_order.skip_transfer:
+		doc.get_required_items()
 
 	if auto_create:
 		doc.flags.ignore_mandatory = True

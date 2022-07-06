@@ -1,9 +1,9 @@
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
-def purchase_order_customize_field():
-    purchase_order_customize_field = {
-        "Purchase Order": [
+def purchase_invoice_customize_field():
+    purchase_invoice_customize_field = {
+        "Purchase Invoice": [
             dict(fieldname="section_break1",
                  label='Last Purchase Item List Details',
                  fieldtype='Section Break',
@@ -37,12 +37,7 @@ def purchase_order_customize_field():
                  read_only=1,
                  insert_after='column_break12'
                  ),
-            dict(fieldname="user_name",
-                 label='User Name',
-                 fieldtype='Data',
-                 insert_after='inter_company_order_reference'
-                 ),
         ]
     }
 
-    create_custom_fields(purchase_order_customize_field)
+    create_custom_fields(purchase_invoice_customize_field)

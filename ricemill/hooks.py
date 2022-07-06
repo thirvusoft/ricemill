@@ -31,14 +31,17 @@ app_license = "MIT"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-
-
 doctype_js = {
+
     "Work Order": "ricemill/custom/js/workorder.js",
     "Job Card": "ricemill/custom/js/job_card.js",
     "Operation": "ricemill/custom/js/operation.js",
-    "Purchase Order": "ricemill/custom/js/purchase_order.js"
+    "Purchase Order": "ricemill/custom/js/purchase_order.js",
+    "Purchase Receipt": "ricemill/custom/js/purchase_receipt.js",
+    "Purchase Invoice": "ricemill/custom/js/purchase_invoice.js",
+    "Warehouse":"ricemill/custom/js/warehouse.js"
 }
+
 
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -66,8 +69,8 @@ doctype_js = {
 
 # before_install = "ricemill.install.before_install"
 
-
 after_install = "ricemill.utils.after_install.after_install"
+
 # Uninstallation
 
 # before_uninstall = "ricemill.uninstall.before_uninstall"
@@ -103,8 +106,9 @@ after_install = "ricemill.utils.after_install.after_install"
 # ---------------
 # Hook on document methods and events
 
-
 doc_events = {
+
+	
     "Sales Invoice": {
         "validate": "ricemill.ricemill.custom.js.python.sales_invoice.calc_commission",
         "on_submit": "ricemill.ricemill.custom.js.python.sales_invoice.create_gl_entry",
@@ -116,8 +120,19 @@ doc_events = {
     "Work Order": {
         "before_submit": "ricemill.ricemill.custom.py.workorder.before_submit"
     },
-    "Bin":{
-        "validate":"ricemill.utils.stock.bin.bin.stock_level"
+    "BOM": {
+        'validate': "ricemill.ricemill.custom.py.bom.validate"
+    },
+    "Purchase Order": {
+        'validate': "ricemill.ricemill.custom.py.purchase_order.username_validate"
+    },
+    "Stock Ledger Entry":{
+		"before_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse",
+        "on_submit":"ricemill.ricemill.custom.py.stock_ledger_entry.create_stock_entry"
+	},
+    "Purchase Receipt":{
+        "validate":"ricemill.utils.buying.purchase_receipt.batch_configuration",
+        # "on_submit":"ricemill.utils.buying.purchase_receipt.create_stock_entry"
     }
 }
 

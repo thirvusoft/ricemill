@@ -73,7 +73,7 @@ def get_columns():
 
 
 def get_data(filters):
-    filter = {}
+    filter = {'status':['not in', ('Open', 'Cancelled')]}
     keys = list(filters.keys())
     if("job_card" in keys):
         filter["name"] = filters["job_card"]

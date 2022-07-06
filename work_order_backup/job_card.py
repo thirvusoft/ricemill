@@ -76,15 +76,9 @@ class JobCard(Document):
 				row.sub_operation = row.operation
 				self.append("sub_operations", row)
 
-	def before_submit(self):
-		frappe.db.set_value("Work Order",self.work_order,"qty",self.total_completed_qty)
-		frappe.db.commit()
 	def validate_time_logs(self):
 		self.total_time_in_mins = 0.0
 		self.total_completed_qty = 0.0
-		shift_id_time_in_mins = []
-		completed_qty = []
-		shift_id_in_time_logs = []
 
 		if self.get("time_logs"):
 			for d in self.get("time_logs"):
@@ -102,19 +96,10 @@ class JobCard(Document):
 
 				if d.from_time and d.to_time:
 					d.time_in_mins = time_diff_in_hours(d.to_time, d.from_time) * 60
-					d.time_in_hrs  = time_diff_in_hours(d.to_time, d.from_time)
-					if(d.shift_id not in shift_id_time_in_mins):
-						shift_id_time_in_mins.append(d.shift_id)
-						self.total_time_in_mins += d.time_in_mins
-					# self.total_time_in_mins += d.time_in_mins
+					self.total_time_in_mins += d.time_in_mins
 
 				if d.completed_qty and not self.sub_operations:
-					#code start
-					if(d.shift_id not in shift_id_in_time_logs):
-						shift_id_in_time_logs.append(d.shift_id)
-						self.total_completed_qty += d.completed_qty
-					#code end
-					# self.total_completed_qty += d.completed_qt
+					self.total_completed_qty += d.completed_qty
 
 			self.total_completed_qty = flt(self.total_completed_qty, self.precision("total_completed_qty"))
 
@@ -260,16 +245,13 @@ class JobCard(Document):
 						}
 					)
 		elif args.get("start_time"):
-			if(len(self.time_logs) ==0):
-				shift_id=0
-			else:
-				shift_id = max([int(i.shift_id) for i in self.time_logs])+1
-			new_args = frappe._dict({
-				"from_time": get_datetime(args.get("start_time")),
-				"operation": args.get("sub_operation"),
-				"completed_qty": 0.0,
-				"shift_id" : shift_id
-			})
+			new_args = frappe._dict(
+				{
+					"from_time": get_datetime(args.get("start_time")),
+					"operation": args.get("sub_operation"),
+					"completed_qty": 0.0,
+				}
+			)
 
 			if employees:
 				for name in employees:

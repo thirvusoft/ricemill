@@ -23,32 +23,7 @@ frappe.ui.form.on('Job Card', {
 		);
 	},
 
-	on_submit: function(frm){
-		let work_order_frm={};
-		frappe.db.get_doc("Work Order", frm.doc.work_order).then(function(data){
-			work_order_frm = data
-			let purpose = frm.doc.ts_stock_entry_type
-			return frappe.xcall('erpnext.manufacturing.doctype.work_order.work_order.make_stock_entry', {
-				'work_order_id': work_order_frm.name,
-				'purpose': frm.doc.ts_stock_entry_type,
-				'qty': frm.doc.total_completed_qty,
-				'sw' : frm.doc.ts_source_warehouse,
-				'tw' : frm.doc.ts_target_warehouse,
-			}).then(stock_entry => {
-				frappe.model.sync(stock_entry);
-				frappe.set_route('Form', stock_entry.doctype, stock_entry.name);
-			});
-		})
-	},
-
 	refresh: function(frm) {
-		if(!frm.doc.employee.length ){
-			let len=frm.doc.time_logs.length
-			frm.set_value('time_logs',[])
-			if(!len){
-			// frm.refresh()
-			}
-		}
 		frappe.flags.pause_job = 0;
 		frappe.flags.resume_job = 0;
 		let has_items = frm.doc.items && frm.doc.items.length;
@@ -95,8 +70,8 @@ frappe.ui.form.on('Job Card', {
 
 		frm.trigger("toggle_operation_number");
 
-		if (frm.doc.docstatus == 0 && !frm.is_new() 
-			// && (frm.doc.for_quantity > frm.doc.total_completed_qty || !frm.doc.for_quantity)
+		if (frm.doc.docstatus == 0 && !frm.is_new() &&
+			(frm.doc.for_quantity > frm.doc.total_completed_qty || !frm.doc.for_quantity)
 			&& (frm.doc.items || !frm.doc.items.length || frm.doc.for_quantity == frm.doc.transferred_qty)) {
 
 			// if Job Card is link to Work Order, the job card must not be able to start if Work Order not "Started"
@@ -120,6 +95,13 @@ frappe.ui.form.on('Job Card', {
 					frm.set_df_property('items', 'hidden', 1);
 				}
 			});
+		}
+	},
+	onload: function(frm){
+		if(frm.is_new()){
+			frm.set_value('time_logs',[])
+			frm.refresh()
+			console.log("Reached")
 		}
 	},
 
@@ -244,16 +226,10 @@ frappe.ui.form.on('Job Card', {
 					args:{doc:cur_frm.doc},
 					callback(r){
 						if ((frm.doc.employee && !frm.doc.employee.length) || !frm.doc.employee) {
-							// frappe.prompt({fieldtype: 'Table MultiSelect', label: __('Select Employees'),
-							//  options: "Job Card Time Log", fieldname: 'employees'}, d => {
-									var employee_list=[]
-									frappe.db.get_doc("Workstation",frm.doc.workstation).then(ts_workstation_details=>{
-										for(var i=0;i<ts_workstation_details.ts_labour.length;i++){
-											employee_list.push({'employee':ts_workstation_details.ts_labour[i].ts_labour})
-										}
-										frm.events.start_job(frm, "Work In Progress", employee_list);
-									})
-							// }, __("Assign Job to Employee"));
+							frappe.prompt({fieldtype: 'Table MultiSelect', label: __('Select Employees'),
+								options: "Job Card Time Log", fieldname: 'employees'}, d => {
+								frm.events.start_job(frm, "Work In Progress", d.employees);
+							}, __("Assign Job to Employee"));
 						} else {
 							frm.events.start_job(frm, "Work In Progress", frm.doc.employee);
 						}	
@@ -296,7 +272,6 @@ frappe.ui.form.on('Job Card', {
 	},
 
 	start_job: function(frm, status, employee) {
-		if(!employee.length){frappe.throw({title:"Not Found",message:"Employee not found in workstation <b>"+frm.doc.workstation+"</b>"})}
 		const args = {
 			job_card_id: frm.doc.name,
 			start_time: frappe.datetime.now_datetime(),

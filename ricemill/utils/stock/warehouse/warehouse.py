@@ -1,6 +1,6 @@
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-def create_fields():
+def create_warehouse_fields():
     custom_fields={
         "Warehouse":[
             dict(fieldname="section_break_228", fieldtype="Section Break", insert_after="disabled"),
@@ -39,7 +39,7 @@ def create_fields():
             dict(fieldname='allow_as_batch', 
                 label='Allow as',
                 fieldtype='Select',
-                options='\n Merge with Existing Batch \n Merge with Incoming Batch \n Separate Batch',
+                options='\nMerge with Existing Batch\nMerge with Incoming Batch\nSeparate Batch',
                 insert_after='batch_not_allow', 
                 read_only=0,
                 depends_on='eval:doc.batch_not_allow==0'),
@@ -57,7 +57,7 @@ def create_fields():
             dict(fieldname='allow_as_item', 
                 label='Allow as',
                 fieldtype='Select',
-                options='\n Merge with Existing Item \n Merge with Incoming Item \n Separate Item' ,
+                options='\nMerge with Existing Item\nMerge with Incoming Item\nSeparate Item' ,
                 insert_after='_different_item_not_allow', 
                 read_only=0,
                 depends_on='eval:doc._different_item_not_allow==0'),
