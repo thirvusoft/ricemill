@@ -52,7 +52,6 @@ frappe.ui.form.on('Purchase Receipt', {
             // User could want to select a manually created empty batch (no warehouse)
             // or a pre-existing batch
                 filters["warehouse"] = item.warehouse || item.t_warehouse;
-                console.log(filters)
             return {
                 query : "erpnext.controllers.queries.get_batch_no",
                 filters: filters
