@@ -1,4 +1,3 @@
-from cProfile import label
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def create_warehouse_fields():
