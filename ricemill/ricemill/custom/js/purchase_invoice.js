@@ -71,7 +71,6 @@ function set_warehouse_validation_field(frm, cdt, cdn){
                     }
                     frappe.model.set_value(cdt, cdn, 'batch_configuration', batch_configuration)
                     frm.refresh();
-                    console.log(batch_configuration)
                 }
                 else{if(data._different_item_not_allow === 1){
                     if(data.allow_as_item === "Merge with Existing Item"){
@@ -88,7 +87,6 @@ function set_warehouse_validation_field(frm, cdt, cdn){
                     }
                     frappe.model.set_value(cdt, cdn, 'item_conversion_type', item_conversion_type)
                     frm.refresh()
-                    console.log(item_conversion_type)
                 }}
             }
         })
