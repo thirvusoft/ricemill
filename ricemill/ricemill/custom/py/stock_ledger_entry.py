@@ -12,9 +12,9 @@ def validate_warehouse(doc, action):
     dict = {}
     for items in doc.items:
         if items.warehouse not in dict.keys():
-            dict[items.warehouse] = items.qty
+            dict[items.warehouse] = items.stock_qty
         else:
-            dict[items.warehouse] = dict[items.warehouse] + items.qty
+            dict[items.warehouse] = dict[items.warehouse] + items.stock_qty
     for keys in list(dict.keys()):
 
         bin = sum(frappe.db.get_all(
