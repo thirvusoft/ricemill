@@ -1,9 +1,10 @@
+from cProfile import label
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 def create_warehouse_fields():
     custom_fields={
         "Warehouse":[
-            dict(fieldname="section_break_228", fieldtype="Section Break", insert_after="disabled"),
+            dict(fieldname="section_break_228", fieldtype="Section Break", insert_after="disabled",),
             dict
                 (fieldname='section_break_1',  label='Warehouse Capacity',
                 fieldtype='Section Break', insert_after='section_break_228', read_only=0),
@@ -13,7 +14,14 @@ def create_warehouse_fields():
 
             dict(fieldname='warehouse_capacity', label='Warehouse Capacity',
                 fieldtype='Float', insert_after='capacity', read_only=0, depends_on='eval:doc.capacity==1'),
-
+            dict(fieldname='block_and_message', label='Block and Message', description='Select any one Block or Message.', 
+                fieldtype='Heading', insert_after='warehouse_capacity', read_only=0),
+            dict(fieldname='block', label='Block',description='It will not allow to store the item if the Warehouse Capacity exist',
+                fieldtype='Check', insert_after='batch_and_message', read_only=0, depends_on='eval:doc.capacity==1'),
+            
+            dict(fieldname='message', label='Message',description='It will allow to store the item if the Warehouse Capacity exist',
+                fieldtype='Check', insert_after='block', read_only=0, depends_on='eval:doc.capacity==1'),
+            
             dict(fieldname='block', label='Block',
                 fieldtype='Check', insert_after='warehouse_capacity', read_only=0, depends_on='eval:doc.capacity==1'),
             

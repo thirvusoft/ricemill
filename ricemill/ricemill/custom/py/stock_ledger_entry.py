@@ -46,7 +46,7 @@ def get_valuation_rate(warehouse):
 def create_stock_entry(self, action):
     ref_doctype = self.voucher_type
     ref_docname = self.voucher_no
-    if ref_doctype == "Purchase Receipt":
+    if ref_doctype == "Purchase Receipt" or ref_doctype == "Purchase Invoice":
         cur_doc = frappe.get_doc(ref_doctype, ref_docname)
         for i in cur_doc.items:
             if i.warehouse == self.warehouse and i.item_code == self.item_code and i.batch_configuration == "Merge with Existing Batch":

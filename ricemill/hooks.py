@@ -135,6 +135,7 @@ doc_events = {
         "before_submit": "ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
     },
     "Purchase Invoice": {
+        "validate": "ricemill.utils.buying.purchase_receipt.batch_configuration",
         "before_submit": "ricemill.ricemill.custom.py.stock_ledger_entry.validate_warehouse"
     }
 }
