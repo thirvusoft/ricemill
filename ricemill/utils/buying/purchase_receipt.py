@@ -1,6 +1,5 @@
 from cProfile import label
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-from traitlets import default
 
 
 def purchase_receipt_customize_field():
