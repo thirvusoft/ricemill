@@ -1,6 +1,4 @@
-from cProfile import label
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-from traitlets import default
 
 
 def purchase_receipt_customize_field():
@@ -11,33 +9,23 @@ def purchase_receipt_customize_field():
                  fieldtype='Section Break',
                  insert_after='items'
                  ),
-            dict(fieldname="last_purchase_item",
+            dict(fieldname="last_purchase",
+                 label='Select Last Purchase Limit',
+                 fieldtype='Select',
+                 insert_after='section_break1',
+                 options="3\n2\n1"
+                 ),
+            dict(fieldname="ts_last_purchase_item",
                  label='Last Purchase Item',
-                 fieldtype='Link',
-                 options="Item",
+                 fieldtype='Table',
+                 options="Last Purchase Item List Details",
                  read_only=1,
-                 insert_after='section_break1'
+                 insert_after='last_purchase'
                  ),
-            dict(fieldname="column_break11",
-                 fieldtype='Column Break',
-                 insert_after='last_purchase_item'
-                 ),
-            dict(fieldname="last_purchase_supplier",
-                 label='Last Purchase Supplier',
-                 fieldtype='Link',
-                 options="Supplier",
-                 read_only=1,
-                 insert_after='column_break11'
-                 ),
-            dict(fieldname="column_break12",
-                 fieldtype='Column Break',
-                 insert_after='last_purchase_supplier'
-                 ),
-            dict(fieldname="last_purchase_rate",
-                 label='Last Purchase Rate',
-                 fieldtype='Currency',
-                 read_only=1,
-                 insert_after='column_break12'
+            dict(fieldname="section_break2",
+                 label='Last Purchase Item List Details',
+                 fieldtype='Section Break',
+                 insert_after='ts_last_purchase_item'
                  ),
             dict(fieldname="vechile_no",
                  label='Vechile No',
