@@ -13,7 +13,8 @@ def purchase_invoice_customize_field():
                  label='Select Last Purchase Limit',
                  fieldtype='Select',
                  insert_after='section_break1',
-                 options="3\n2\n1"
+                 options="5\n4\n3\n2\n1",
+                 default="3"
                  ),
             dict(fieldname="ts_last_purchase_item",
                  label='Last Purchase Item',
