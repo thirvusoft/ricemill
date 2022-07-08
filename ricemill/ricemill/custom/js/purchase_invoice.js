@@ -3,6 +3,11 @@ frappe.ui.form.on('Purchase Invoice', {
     setup: function (frm, cdt, cdn) {
         rows = locals[cdt][cdn]
     },
+    set_warehouse: function(frm){
+        frm.doc.items.forEach(element => {
+            set_warehouse_validation_field(frm,element.doctype,element.name)
+        });
+    }
 })
 frappe.ui.form.on('Purchase Invoice Item', {
     item_code: function (frm, cdt, cdn) {
@@ -50,6 +55,8 @@ function select_item_option(frm,cdt,cdn){
 function set_warehouse_validation_field(frm, cdt, cdn){
 
     let row = locals[cdt][cdn]
+    frappe.db.get_list("Item", {filters:{'name':row.item_code},fields:['has_batch_no']}).then( (batch)=>{
+        if(batch[0].has_batch_no === 1){
     if(row.warehouse){
     frappe.db.get_list("Warehouse",{filters:{'name':row.warehouse},
         fields:['message', 'batch_not_allow', 'allow_as_batch', '_different_item_not_allow','allow_as_item']}).then( (r)=>{
@@ -90,8 +97,10 @@ function set_warehouse_validation_field(frm, cdt, cdn){
                 }}
             }
         })
-    }
-    select_item_option(frm,cdt,cdn)
+        }
+        select_item_option(frm,cdt,cdn)
+            }
+        })
 }
 frappe.ui.form.on('Purchase Invoice', {
     setup: function(frm, cdt, cdn){

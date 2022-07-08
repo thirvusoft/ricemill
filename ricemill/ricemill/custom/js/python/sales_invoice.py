@@ -10,14 +10,15 @@ def  calc_commission(doc,event):
 
 
 def create_gl_entry(doc,event):
-    gl_doc=frappe.new_doc('GL Entry')
-    gl_doc.posting_date=doc.due_date
-    gl_doc.account=doc.commission_account
-    gl_doc.cost_center=doc.cost_center
-    gl_doc.voucher_type=doc.doctype
-    gl_doc.voucher_no=doc.name
-    gl_doc.credit=doc.total_commission
-    gl_doc.credit_in_account_currency=doc.total_commission
-    gl_doc.save()
-    gl_doc.submit()
+    if(doc.ts_account == 1):
+        gl_doc=frappe.new_doc('GL Entry')
+        gl_doc.posting_date=doc.due_date
+        gl_doc.account=doc.commission_account
+        gl_doc.cost_center=doc.cost_center
+        gl_doc.voucher_type=doc.doctype
+        gl_doc.voucher_no=doc.name
+        gl_doc.credit=doc.total_commission
+        gl_doc.credit_in_account_currency=doc.total_commission
+        gl_doc.save()
+        gl_doc.submit()
 
