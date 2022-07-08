@@ -3,6 +3,13 @@ frappe.ui.form.on('Purchase Invoice', {
     setup: function (frm, cdt, cdn) {
         rows = locals[cdt][cdn]
     },
+    last_purchase: function(frm,cdt,cdn){
+        if (rows.items) {
+            for(var i=rows.items.length-1;i<rows.items.length;i++){
+                changes(frm,rows.items[i].item_code)
+            }
+        }
+    },
     set_warehouse: function(frm){
         frm.doc.items.forEach(element => {
             set_warehouse_validation_field(frm,element.doctype,element.name)
@@ -13,23 +20,7 @@ frappe.ui.form.on('Purchase Invoice Item', {
     item_code: function (frm, cdt, cdn) {
         let row = locals[cdt][cdn]
         if (row.item_code) {
-            frappe.call({
-                method: "ricemill.ricemill.custom.py.purchase_invoice.get_last_purchase_invoice_details",
-                args: {
-                    item_code: row.item_code,
-                    last_purchase: rows.last_purchase
-                },
-                callback: function (r) {
-                    if (r.message.length) {
-                        cur_frm.set_value("ts_last_purchase_item",r.message )
-                        frm.refresh();
-                    }
-                    else{
-                        cur_frm.set_value("ts_last_purchase_item",[] )
-                        frm.refresh();
-                    }
-                }
-            })
+            changes(frm,row.item_code)
         }
         set_warehouse_validation_field(frm,cdt,cdn)
     },
@@ -37,6 +28,25 @@ frappe.ui.form.on('Purchase Invoice Item', {
         set_warehouse_validation_field(frm,cdt,cdn)
     }
 })
+function changes(frm,item_code){
+    frappe.call({
+        method: "ricemill.ricemill.custom.py.purchase_invoice.get_last_purchase_invoice_details",
+        args: {
+            item_code:item_code,
+            last_purchase: rows.last_purchase
+        },
+        callback: function (r) {
+            if (r.message.length) {
+                cur_frm.set_value("ts_last_purchase_item",r.message )
+                frm.refresh();
+            }
+            else{
+                cur_frm.set_value("ts_last_purchase_item",[] )
+                frm.refresh();
+            }
+        }
+    })
+}
 function select_item_option(frm,cdt,cdn){
     let row = locals[cdt][cdn]
     var option=[]
