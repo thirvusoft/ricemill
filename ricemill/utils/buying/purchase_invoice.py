@@ -1,5 +1,6 @@
+import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
-
+import json
 
 def purchase_invoice_customize_field():
     purchase_invoice_customize_field = {
@@ -75,28 +76,3 @@ def purchase_invoice_customize_field():
     }
 
     create_custom_fields(purchase_invoice_customize_field)
-import frappe
-def batch_configuration(self,action):
-     for i in self.items:
-          warehouse=frappe.get_doc("Warehouse",i.warehouse)
-          warehouse_qty=sum(frappe.db.get_all("Bin",pluck="actual_qty" ,filters={"warehouse":i.warehouse}))
-          # if warehouse.warehouse_capacity <= warehouse_qty:
-          if warehouse.message == 1:
-               if warehouse.batch_not_allow == 1:
-                    if warehouse.allow_as_batch == "Merge with Existing Batch":
-                         i.batch_configuration = "Merge with Existing Batch"
-                    elif warehouse.allow_as_batch == "Merge with Incoming Batch":
-                         i.batch_configuration = "Merge with Incoming Batch"
-                    elif warehouse.allow_as_batch == "Separate Batch":
-                         i.batch_configuration = "Separate Batch"
-                    else:
-                         i.batch_configuration = warehouse.allow_as_batch
-               elif warehouse._different_item_not_allow  == 1:
-                    if warehouse.allow_as_item == "Merge with Existing Item":
-                         i.item_conversion_type = "Merge with Existing Item"
-                    elif warehouse.allow_as_item == "Merge with Incoming Item":
-                         i.item_conversion_type = "Merge with Incoming Item"
-                    elif warehouse.allow_as_item == "Separate Item":
-                         i.item_conversion_type = "Separate Item"
-                    else:
-                         i.item_conversion_type = warehouse.allow_as_item

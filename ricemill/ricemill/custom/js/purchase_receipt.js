@@ -3,12 +3,19 @@ frappe.ui.form.on('Purchase Receipt', {
     setup: function (frm, cdt, cdn) {
         rows = locals[cdt][cdn]
     },
+<<<<<<< HEAD
     last_purchase: function(frm,cdt,cdn){
         if (rows.items) {
             for(var i=rows.items.length-1;i<rows.items.length;i++){
                 changes(frm,rows.items[i].item_code)
             }
         }
+=======
+    set_warehouse: function(frm){
+        frm.doc.items.forEach(element => {
+            set_warehouse_validation_field(frm,element.doctype,element.name)
+        });
+>>>>>>> c658d4aa7f9d737b4c6b5482ddeff21dcea7f649
     }
 })
 frappe.ui.form.on('Purchase Receipt Item', {
@@ -17,10 +24,10 @@ frappe.ui.form.on('Purchase Receipt Item', {
         if (row.item_code) {
             changes(frm,row.item_code)
         }
-        select_item_option(frm,cdt,cdn)
+        set_warehouse_validation_field(frm,cdt,cdn)
     },
-    warehouse: function(frm,cdt,cdn){
-        select_item_option(frm,cdt,cdn)
+    'warehouse': function(frm,cdt,cdn){
+        set_warehouse_validation_field(frm,cdt,cdn)
     }
 })
 function changes(frm,item_code){
@@ -50,12 +57,62 @@ function select_item_option(frm,cdt,cdn){
             for(var i=0;i<res.length;i++){
                 option.push(res[i].item_code);
             }
+            var df = frappe.meta.get_docfield("Purchase Receipt Item","ts_select_item_conversion", row.name);
+            df.options = option;
+            frm.refresh(row.ts_select_item_conversion);
 		});
-    var df = frappe.meta.get_docfield("Purchase Receipt Item","ts_select_item_conversion", row.name);
-    df.options = option;
-    frm.refresh(row.ts_select_item_conversion);
-
 }
+function set_warehouse_validation_field(frm, cdt, cdn){
+    let row = locals[cdt][cdn]
+    if(row.item_code){
+    frappe.db.get_list("Item", {filters:{'name':row.item_code},fields:['has_batch_no']}).then( (batch)=>{
+        if(batch[0].has_batch_no === 1){
+            if(row.warehouse){
+                frappe.db.get_list("Warehouse",{filters:{'name':row.warehouse},
+                    fields:['message', 'batch_not_allow', 'allow_as_batch', '_different_item_not_allow','allow_as_item']}).then( (r)=>{
+                        let data = r[0]
+                        let batch_configuration = '', item_conversion_type = '';
+                        if(data.message === 1){
+                            if(data.batch_not_allow === 1){
+                                if(data.allow_as_batch === "Merge with Existing Batch"){
+                                    batch_configuration = "Merge with Existing Batch"
+                                }
+                                if(data.allow_as_batch === "Merge with Incoming Batch"){
+                                    batch_configuration = "Merge with Incoming Batch"
+                                }
+                                if(data.allow_as_batch === "Separate Batch"){
+                                    batch_configuration = "Separate Batch"
+                                }
+                                else{
+                                    batch_configuration = data.allow_as_batch
+                                }
+                                frappe.model.set_value(cdt, cdn, 'batch_configuration', batch_configuration)
+                                frm.refresh();
+                            }
+                            else{if(data._different_item_not_allow === 1){
+                                if(data.allow_as_item === "Merge with Existing Item"){
+                                    item_conversion_type = "Merge with Existing Item"
+                                }
+                                if(data.allow_as_item === "Merge with Incoming Item"){
+                                    item_conversion_type = "Merge with Incoming Item"
+                                }
+                                if(data.allow_as_item === "Separate Item"){
+                                    item_conversion_type = "Separate Item"
+                                }
+                                // else{
+                                //     item_conversion_type = data.allow_as_item
+                                // }
+                                frappe.model.set_value(cdt, cdn, 'item_conversion_type', item_conversion_type)
+                                frm.refresh()
+                            }}
+                        }
+                    })
+                }
+        select_item_option(frm,cdt,cdn)
+        }
+    })   } 
+}
+
 frappe.ui.form.on('Purchase Receipt', {
     setup: function(frm, cdt, cdn){
         frm.set_query('select_batch', 'items', function(frm, cdt, cdn) {
