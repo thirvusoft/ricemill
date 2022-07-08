@@ -20,6 +20,7 @@ frappe.ui.form.on('Purchase Order Item', {
     }
 })
 function changes(frm,item_code){
+    if(item_code){
     frappe.call({
         method: "ricemill.ricemill.custom.py.purchase_invoice.get_last_purchase_invoice_details",
         args: {
@@ -37,4 +38,5 @@ function changes(frm,item_code){
             }
         }
     })
+}
 }

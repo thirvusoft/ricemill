@@ -29,6 +29,7 @@ frappe.ui.form.on('Purchase Invoice Item', {
     }
 })
 function changes(frm,item_code){
+    if(item_code){
     frappe.call({
         method: "ricemill.ricemill.custom.py.purchase_invoice.get_last_purchase_invoice_details",
         args: {
@@ -46,6 +47,7 @@ function changes(frm,item_code){
             }
         }
     })
+}
 }
 function select_item_option(frm,cdt,cdn){
     let row = locals[cdt][cdn]
@@ -65,6 +67,7 @@ function select_item_option(frm,cdt,cdn){
 function set_warehouse_validation_field(frm, cdt, cdn){
 
     let row = locals[cdt][cdn]
+    if(row.item_code){
     frappe.db.get_list("Item", {filters:{'name':row.item_code},fields:['has_batch_no']}).then( (batch)=>{
         if(batch[0].has_batch_no === 1){
     if(row.warehouse){
@@ -111,6 +114,7 @@ function set_warehouse_validation_field(frm, cdt, cdn){
         select_item_option(frm,cdt,cdn)
             }
         })
+    }
 }
 frappe.ui.form.on('Purchase Invoice', {
     setup: function(frm, cdt, cdn){
