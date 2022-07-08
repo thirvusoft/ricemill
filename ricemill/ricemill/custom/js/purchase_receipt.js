@@ -3,19 +3,17 @@ frappe.ui.form.on('Purchase Receipt', {
     setup: function (frm, cdt, cdn) {
         rows = locals[cdt][cdn]
     },
-<<<<<<< HEAD
     last_purchase: function(frm,cdt,cdn){
         if (rows.items) {
             for(var i=rows.items.length-1;i<rows.items.length;i++){
                 changes(frm,rows.items[i].item_code)
             }
         }
-=======
+    },
     set_warehouse: function(frm){
         frm.doc.items.forEach(element => {
             set_warehouse_validation_field(frm,element.doctype,element.name)
         });
->>>>>>> c658d4aa7f9d737b4c6b5482ddeff21dcea7f649
     }
 })
 frappe.ui.form.on('Purchase Receipt Item', {
